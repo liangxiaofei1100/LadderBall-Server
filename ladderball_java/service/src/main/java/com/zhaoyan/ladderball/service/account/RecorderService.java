@@ -5,6 +5,8 @@ import com.zhaoyan.ladderball.dao.account.RecorderDao;
 import com.zhaoyan.ladderball.domain.account.db.Recorder;
 import com.zhaoyan.ladderball.domain.account.http.RecorderLoginRequest;
 import com.zhaoyan.ladderball.domain.account.http.RecorderLoginResponse;
+import com.zhaoyan.ladderball.domain.account.http.RecorderSetPasswordRequest;
+import com.zhaoyan.ladderball.domain.account.http.RecorderSetPasswordResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,11 +15,11 @@ import org.springframework.cglib.beans.BeanCopier;
 import org.springframework.stereotype.Service;
 
 /**
- * 登录
+ * 录入数据人员
  */
 @Service
-public class RecorderLoginService {
-    Logger logger = LoggerFactory.getLogger(RecorderLoginService.class);
+public class RecorderService {
+    Logger logger = LoggerFactory.getLogger(RecorderService.class);
 
     @Autowired
     @Qualifier("hibernateRecorderDao")
@@ -52,6 +54,30 @@ public class RecorderLoginService {
         } else {
             // 登录验证失败
             response.buildFail("账号或者密码错误");
+        }
+
+        return response;
+    }
+
+    /**
+     *  修改密码
+     */
+    public RecorderSetPasswordResponse setPassword(RecorderSetPasswordRequest request) {
+        RecorderSetPasswordResponse response = new RecorderSetPasswordResponse();
+
+        try {
+            logger.debug("setPassword() request.header: " + request.header);
+            long recorderId = Long.valueOf(request.header.userToken);
+            boolean result = recorderDao.setPassword(recorderId, request.password, request.newPassword);
+            if (result) {
+                response.buildOk("修改密码成功");
+            } else {
+                response.buildFail("修改密码失败");
+            }
+        } catch (Exception e) {
+            logger.error("setPassword() Exception: " + e);
+            e.printStackTrace();
+            response.buildFail("修改密码失败");
         }
 
         return response;
