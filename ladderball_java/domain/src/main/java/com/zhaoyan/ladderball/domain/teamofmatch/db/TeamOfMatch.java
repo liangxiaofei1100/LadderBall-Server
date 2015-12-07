@@ -43,4 +43,14 @@ public class TeamOfMatch {
     public void setColor(String color) {
         this.color = color;
     }
+
+    @Override
+    public String toString() {
+        return "TeamOfMatch{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", score=" + score +
+                ", color='" + color + '\'' +
+                '}';
+    }
 }

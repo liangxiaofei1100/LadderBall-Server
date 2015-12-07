@@ -8,5 +8,7 @@ import java.util.List;
 
 public interface RecorderMatchDao {
 
-    List<RecorderMatch> getRecorderMatch(long recorderId);
+    List<RecorderMatch> getRecorderMatchByRecorder(long recorderId);
+
+    RecorderMatch getRecorderMatchByRecorderMatch(long recorderId, long matchId);
 }

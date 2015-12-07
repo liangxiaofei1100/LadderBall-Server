@@ -1,5 +1,7 @@
 package com.zhaoyan.ladderball.app.match;
 
+import com.zhaoyan.ladderball.domain.match.http.MatchDetailRequest;
+import com.zhaoyan.ladderball.domain.match.http.MatchDetailResponse;
 import com.zhaoyan.ladderball.domain.match.http.MatchListRequest;
 import com.zhaoyan.ladderball.domain.match.http.MatchListResponse;
 import com.zhaoyan.ladderball.service.match.MatchService;
@@ -30,4 +32,14 @@ public class MatchController {
         MatchListResponse response = matchService.getMatchList(request);
         return response;
     }
+
+    @RequestMapping(value = "/detail", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+    public
+    @ResponseBody
+    MatchDetailResponse getMatchDetail(@RequestBody MatchDetailRequest request) {
+        logger.debug("getMatchDetail() MatchDetailRequest: " + request);
+        MatchDetailResponse response = matchService.getMatchDetail(request);
+        return response;
+    }
+
 }
