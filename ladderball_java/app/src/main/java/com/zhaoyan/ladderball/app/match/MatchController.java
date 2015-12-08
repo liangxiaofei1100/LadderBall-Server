@@ -1,9 +1,6 @@
 package com.zhaoyan.ladderball.app.match;
 
-import com.zhaoyan.ladderball.domain.match.http.MatchDetailRequest;
-import com.zhaoyan.ladderball.domain.match.http.MatchDetailResponse;
-import com.zhaoyan.ladderball.domain.match.http.MatchListRequest;
-import com.zhaoyan.ladderball.domain.match.http.MatchListResponse;
+import com.zhaoyan.ladderball.domain.match.http.*;
 import com.zhaoyan.ladderball.service.match.MatchService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,6 +36,15 @@ public class MatchController {
     MatchDetailResponse getMatchDetail(@RequestBody MatchDetailRequest request) {
         logger.debug("getMatchDetail() MatchDetailRequest: " + request);
         MatchDetailResponse response = matchService.getMatchDetail(request);
+        return response;
+    }
+
+    @RequestMapping(value = "/modify", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+    public
+    @ResponseBody
+    MatchModifyResponse modifyMatch(@RequestBody MatchModifyRequest request) {
+        logger.debug("getMatchDetail() MatchModifyRequest: " + request);
+        MatchModifyResponse response = matchService.modifyMatch(request);
         return response;
     }
 

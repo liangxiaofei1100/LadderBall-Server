@@ -5,10 +5,7 @@ import com.zhaoyan.ladderball.dao.player.PlayerOfMatchDao;
 import com.zhaoyan.ladderball.dao.recordermatch.RecorderMatchDao;
 import com.zhaoyan.ladderball.dao.teamofmatch.TeamOfMatchDao;
 import com.zhaoyan.ladderball.domain.match.db.Match;
-import com.zhaoyan.ladderball.domain.match.http.MatchDetailRequest;
-import com.zhaoyan.ladderball.domain.match.http.MatchDetailResponse;
-import com.zhaoyan.ladderball.domain.match.http.MatchListRequest;
-import com.zhaoyan.ladderball.domain.match.http.MatchListResponse;
+import com.zhaoyan.ladderball.domain.match.http.*;
 import com.zhaoyan.ladderball.domain.player.db.PlayerOfMatch;
 import com.zhaoyan.ladderball.domain.recordermatch.db.RecorderMatch;
 import com.zhaoyan.ladderball.domain.teamofmatch.db.TeamOfMatch;
@@ -51,6 +48,8 @@ public class MatchService extends BaseService {
             BeanCopier.create(TeamOfMatch.class, MatchDetailResponse.Team.class, false);
     private static BeanCopier copierPlayerToMatchDetailResponse =
             BeanCopier.create(PlayerOfMatch.class, MatchDetailResponse.Player.class, false);
+    private static BeanCopier copierMatchModifyReqestToPlayer =
+            BeanCopier.create(MatchModifyRequest.Player.class, PlayerOfMatch.class, false);
 
     /**
      * 获取当前用户的比赛
@@ -160,7 +159,7 @@ public class MatchService extends BaseService {
         return response;
     }
 
-    public List<MatchDetailResponse.Player> getPlayers(long teamId) {
+    private List<MatchDetailResponse.Player> getPlayers(long teamId) {
         List<MatchDetailResponse.Player> players = new ArrayList<>();
 
         List<PlayerOfMatch> playerOfMatches = playerOfMatchDao.getPlayerByTeam(teamId);
@@ -175,5 +174,29 @@ public class MatchService extends BaseService {
         }
 
         return players;
+    }
+
+    /**
+     * 设置比赛
+     */
+    public MatchModifyResponse modifyMatch(MatchModifyRequest request) {
+        MatchModifyResponse response = new MatchModifyResponse();
+        response.buildOk();
+        boolean result = matchDao.modifyMatch(request.matchId, request.playerNumber, request.totalPart, request.partMinutes);
+        if (!result) {
+            logger.warn("modifyMatch() modify match fail. matchId: " + request.matchId);
+            response.buildFail();
+            return response;
+        }
+
+        for(MatchModifyRequest.Player player : request.players) {
+            PlayerOfMatch newPlayer = new PlayerOfMatch();
+            copierMatchModifyReqestToPlayer.copy(player, newPlayer, null);
+            boolean playerResult = playerOfMatchDao.modifyPlayer(newPlayer);
+            if (!playerResult) {
+                logger.warn("modifyMatch() modify player fail. playerId: " + player.id);
+            }
+        }
+        return response;
     }
 }

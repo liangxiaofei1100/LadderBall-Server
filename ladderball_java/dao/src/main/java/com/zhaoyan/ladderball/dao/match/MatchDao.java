@@ -20,4 +20,9 @@ public interface MatchDao {
      * 查询一场比赛
      */
     Match getMatch(long id);
+
+    /**
+     * 修改一场比赛
+     */
+    boolean modifyMatch(long id, int playerNumber, int totalPart, int partMinutes);
 }

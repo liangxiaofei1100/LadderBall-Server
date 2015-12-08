@@ -32,4 +32,18 @@ public class HibernateMatchDao implements MatchDao {
         return hibernateTemplate.get(Match.class, id);
     }
 
+    @Override
+    public boolean modifyMatch(long id, int playerNumber, int totalPart, int partMinutes) {
+        Match match = hibernateTemplate.get(Match.class, id);
+        if (match == null) {
+            return false;
+        }
+        match.playerNumber = playerNumber;
+        match.totalPart = totalPart;
+        match.partMinutes = partMinutes;
+
+        hibernateTemplate.update(match);
+        return true;
+    }
+
 }

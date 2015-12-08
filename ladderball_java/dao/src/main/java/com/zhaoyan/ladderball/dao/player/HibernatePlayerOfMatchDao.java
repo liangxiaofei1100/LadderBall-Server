@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public class HibernatePlayerOfMatchDao implements PlayerOfMatchDao{
+public class HibernatePlayerOfMatchDao implements PlayerOfMatchDao {
 
     @Autowired
     HibernateTemplate hibernateTemplate;
@@ -21,5 +21,18 @@ public class HibernatePlayerOfMatchDao implements PlayerOfMatchDao{
         criteria.add(Restrictions.eq("matchId", matchId));
         List<PlayerOfMatch> playerOfMatches = (List<PlayerOfMatch>) hibernateTemplate.findByCriteria(criteria);
         return playerOfMatches;
+    }
+
+    @Override
+    public boolean modifyPlayer(PlayerOfMatch newPlayer) {
+        PlayerOfMatch player = hibernateTemplate.get(PlayerOfMatch.class, newPlayer.id);
+        if (player == null) {
+            return false;
+        }
+        player.name = newPlayer.name;
+        player.isFirst = newPlayer.isFirst;
+        player.number = newPlayer.number;
+        hibernateTemplate.save(player);
+        return true;
     }
 }
