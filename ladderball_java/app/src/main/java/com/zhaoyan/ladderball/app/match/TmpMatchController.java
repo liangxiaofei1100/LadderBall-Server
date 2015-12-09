@@ -19,13 +19,27 @@ public class TmpMatchController {
     @Autowired
     TmpMatchService tmpMatchService;
 
-
+    /**
+     * 获取已领取的练习赛
+     */
     @RequestMapping(value = "/list", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
     public
     @ResponseBody
     MatchListResponse getTmpMatchList(@RequestBody MatchListRequest request) {
         logger.debug("getTmpMatchList() MatchListRequest: " + request);
         MatchListResponse response = tmpMatchService.getMatchList(request);
+        return response;
+    }
+
+    /**
+     * 获取未领取的练习赛
+     */
+    @RequestMapping(value = "/toasignlist", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+    public
+    @ResponseBody
+    MatchListResponse getTmpMatchToAsignList(@RequestBody MatchListRequest request) {
+        logger.debug("getTmpMatchToAsignList() MatchListRequest: " + request);
+        MatchListResponse response = tmpMatchService.getMatchToAsignList(request);
         return response;
     }
 

@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate4.HibernateTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.io.Serializable;
 import java.util.List;
 
 @Repository
@@ -47,5 +46,19 @@ public class HibernateRecorderTmpMatchDao implements RecorderTmpMatchDao{
         hibernateTemplate.flush();
         hibernateTemplate.clear();
         return recorderTmpMatch;
+    }
+
+    @Override
+    public List<RecorderTmpMatch> getToAsignTmpMatchByRecorder(long recorderId) {
+        DetachedCriteria criteria = DetachedCriteria.forClass(RecorderTmpMatch.class);
+        // 认领的是其他记录者
+        criteria.add(Restrictions.ne("recorderId", recorderId));
+        // 认领的是主队
+        criteria.add(Restrictions.eq("asignedTeam", RecorderTmpMatch.ASIGNED_TEAM_HOME));
+        // 比赛的还有队伍没有被认领
+        criteria.add(Restrictions.eq("isMatchAsigned", false));
+
+        List<RecorderTmpMatch> recorderTmpMatches = (List<RecorderTmpMatch>) hibernateTemplate.findByCriteria(criteria);
+        return recorderTmpMatches;
     }
 }

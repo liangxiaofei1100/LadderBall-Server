@@ -20,4 +20,9 @@ public interface RecorderTmpMatchDao {
      * 添加一个记录者和比赛的对应关系
      */
     RecorderTmpMatch addRecorderTmpMatch(RecorderTmpMatch recorderTmpMatch);
+
+    /**
+     * 获取该记录这可以领取的练习赛
+     */
+    List<RecorderTmpMatch> getToAsignTmpMatchByRecorder(long recorderId);
 }

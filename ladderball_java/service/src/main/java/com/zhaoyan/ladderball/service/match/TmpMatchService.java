@@ -235,4 +235,50 @@ public class TmpMatchService extends BaseService {
         response.buildOk();
         return response;
     }
+
+    /**
+     * 获取未领取的练习赛
+     */
+    public MatchListResponse getMatchToAsignList(MatchListRequest request) {
+        MatchListResponse response = new MatchListResponse();
+        response.buildOk();
+        response.matches = new ArrayList<>();
+
+        long recorderId = getRecorderIdFromUserToken(request.header.userToken);
+        List<RecorderTmpMatch> recorderTmpMatches = recorderTmpMatchDao.getToAsignTmpMatchByRecorder(recorderId);
+
+        if (recorderTmpMatches != null) {
+            for (RecorderTmpMatch recorderTmpMatch : recorderTmpMatches) {
+                logger.debug("getMatchToAsignList(), recorderTmpMatch: " + recorderTmpMatch);
+                TmpMatch tmpMatch = tmpMatchDao.getMatch(recorderTmpMatch.matchId);
+
+                if (tmpMatch != null) {
+                    MatchListResponse.Match match = new MatchListResponse.Match();
+                    copierTmpMatchToMatchListResponse.copy(tmpMatch, match, null);
+                    if (tmpMatch.startTime != null) {
+                        match.startTime = tmpMatch.startTime.getTime();
+                    }
+
+                    // 获取主队和客队信息
+                    TmpTeamOfMatch tmpTeamHome = tmpTeamOfMatchDao.getTmpTeamOfMatch(tmpMatch.teamHome);
+                    if (tmpTeamHome != null) {
+                        match.teamHome = new MatchListResponse.Team();
+                        copierTmpTeamOfMatchToMatchListResponse.copy(tmpTeamHome, match.teamHome, null);
+                        match.teamHome.isAsigned = recorderTmpMatch.asignedTeam == RecorderTmpMatch.ASIGNED_TEAM_HOME;
+                    }
+
+                    TmpTeamOfMatch tmpTeamVisitor = tmpTeamOfMatchDao.getTmpTeamOfMatch(tmpMatch.teamVisitor);
+                    if (tmpTeamVisitor != null) {
+                        match.teamVisitor = new MatchListResponse.Team();
+                        copierTmpTeamOfMatchToMatchListResponse.copy(tmpTeamVisitor, match.teamVisitor, null);
+                        match.teamVisitor.isAsigned = recorderTmpMatch.asignedTeam == RecorderTmpMatch.ASIGNED_TEAM_VISITOR;
+                    }
+
+                    response.matches.add(match);
+                }
+            }
+        }
+
+        return response;
+    }
 }

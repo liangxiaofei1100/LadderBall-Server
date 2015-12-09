@@ -17,6 +17,11 @@ public class RecorderTmpMatch {
     public long matchId;
     @Column(name = "asigned_team")
     public int asignedTeam;
+    /**
+     * 是否比赛两个队伍都有人认领，用于判断其他人是否可以认领该场比赛
+     */
+    @Column(name = "is_match_asigned")
+    public boolean isMatchAsigned;
 
     public static final int ASIGNED_TEAM_HOME = 1;
     public static final int ASIGNED_TEAM_VISITOR = 2;
@@ -53,13 +58,22 @@ public class RecorderTmpMatch {
         this.asignedTeam = asignedTeam;
     }
 
+    public boolean getIsMatchAsigned() {
+        return isMatchAsigned;
+    }
+
+    public void setIsMatchAsigned(boolean isMatchAsigned) {
+        this.isMatchAsigned = isMatchAsigned;
+    }
+
     @Override
     public String toString() {
         return "RecorderTmpMatch{" +
                 "id=" + id +
                 ", recorderId=" + recorderId +
-                ", teamId=" + matchId +
+                ", matchId=" + matchId +
                 ", asignedTeam=" + asignedTeam +
+                ", isMatchAsigned=" + isMatchAsigned +
                 '}';
     }
 }
