@@ -1,9 +1,7 @@
 package com.zhaoyan.ladderball.domain.match.db;
 
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -12,6 +10,7 @@ import java.util.Date;
 @Entity(name = "tmpfootballmatch")
 public class TmpMatch {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public long id;
     @Column(name = "team_home")
     public long teamHome;

@@ -70,7 +70,9 @@ public class MatchService extends BaseService {
                 if (match != null) {
                     MatchListResponse.Match m = new MatchListResponse.Match();
                     copierMatchToMatchListResponse.copy(match, m, null);
-                    m.startTime = match.startTime.getTime();
+                    if (match.startTime != null) {
+                        m.startTime = match.startTime.getTime();
+                    }
                     // 获取主队和客队信息
                     TeamOfMatch teamHome = teamOfMatchDao.getTeamOfMatch(match.teamHome);
                     if (teamHome != null) {
@@ -109,7 +111,9 @@ public class MatchService extends BaseService {
             response.totalPart = match.totalPart;
             response.playerNumber = match.playerNumber;
             response.address = match.address;
-            response.startTime = match.startTime.getTime();
+            if (match.startTime != null) {
+                response.startTime = match.startTime.getTime();
+            }
             // 队伍数据
             long recorderId = getRecorderIdFromUserToken(request.header.userToken);
 

@@ -1,12 +1,11 @@
 package com.zhaoyan.ladderball.domain.recordermatch.db;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity(name = "recorder_match")
 public class RecorderMatch {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public long id;
     @Column(name = "recorder_id")
     public long recorderId;

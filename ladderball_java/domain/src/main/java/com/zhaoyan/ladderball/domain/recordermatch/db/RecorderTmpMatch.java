@@ -1,8 +1,7 @@
 package com.zhaoyan.ladderball.domain.recordermatch.db;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.annotation.Generated;
+import javax.persistence.*;
 
 /**
  * 记录员对应比赛
@@ -10,6 +9,7 @@ import javax.persistence.Id;
 @Entity(name = "recorder_tmpmatch")
 public class RecorderTmpMatch {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public long id;
     @Column(name = "recorder_id")
     public long recorderId;

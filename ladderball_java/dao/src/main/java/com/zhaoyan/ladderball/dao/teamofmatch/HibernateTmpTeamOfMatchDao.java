@@ -16,4 +16,12 @@ public class HibernateTmpTeamOfMatchDao implements TmpTeamOfMatchDao{
     public TmpTeamOfMatch getTmpTeamOfMatch(long tmpTeamOfMatchId) {
         return hibernateTemplate.get(TmpTeamOfMatch.class, tmpTeamOfMatchId);
     }
+
+    @Override
+    public TmpTeamOfMatch addTmpTeamOfMatch(TmpTeamOfMatch team) {
+        hibernateTemplate.save(team);
+        hibernateTemplate.flush();
+        hibernateTemplate.clear();
+        return team;
+    }
 }

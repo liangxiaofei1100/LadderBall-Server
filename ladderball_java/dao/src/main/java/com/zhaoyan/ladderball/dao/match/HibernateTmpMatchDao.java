@@ -40,4 +40,12 @@ public class HibernateTmpMatchDao implements TmpMatchDao{
         hibernateTemplate.update(match);
         return true;
     }
+
+    @Override
+    public TmpMatch addMatch(TmpMatch match) {
+        hibernateTemplate.save(match);
+        hibernateTemplate.flush();
+        hibernateTemplate.clear();
+        return match;
+    }
 }

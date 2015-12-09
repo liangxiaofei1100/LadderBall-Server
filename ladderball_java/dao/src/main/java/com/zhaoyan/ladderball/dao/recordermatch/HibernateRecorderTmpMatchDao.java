@@ -1,18 +1,21 @@
 package com.zhaoyan.ladderball.dao.recordermatch;
 
 
-import com.zhaoyan.ladderball.domain.recordermatch.db.RecorderMatch;
 import com.zhaoyan.ladderball.domain.recordermatch.db.RecorderTmpMatch;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Restrictions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate4.HibernateTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Repository
 public class HibernateRecorderTmpMatchDao implements RecorderTmpMatchDao{
+    Logger logger = LoggerFactory.getLogger(HibernateRecorderTmpMatchDao.class);
 
     @Autowired
     HibernateTemplate hibernateTemplate;
@@ -36,5 +39,13 @@ public class HibernateRecorderTmpMatchDao implements RecorderTmpMatchDao{
         }
 
         return null;
+    }
+
+    @Override
+    public RecorderTmpMatch addRecorderTmpMatch(RecorderTmpMatch recorderTmpMatch) {
+        hibernateTemplate.save(recorderTmpMatch);
+        hibernateTemplate.flush();
+        hibernateTemplate.clear();
+        return recorderTmpMatch;
     }
 }

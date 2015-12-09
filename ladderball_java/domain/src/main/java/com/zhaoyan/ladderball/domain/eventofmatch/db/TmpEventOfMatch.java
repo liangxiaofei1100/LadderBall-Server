@@ -1,13 +1,12 @@
 package com.zhaoyan.ladderball.domain.eventofmatch.db;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity(name = "tmpeventofmatch")
 public class TmpEventOfMatch {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public long id;
     @Column(name = "event_code")
     public int eventCode;

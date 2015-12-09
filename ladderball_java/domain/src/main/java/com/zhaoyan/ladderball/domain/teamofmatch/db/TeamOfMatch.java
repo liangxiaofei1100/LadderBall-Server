@@ -1,12 +1,11 @@
 package com.zhaoyan.ladderball.domain.teamofmatch.db;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity(name = "teamofmatch")
 public class TeamOfMatch {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public long id;
     public String name;
     public int score;

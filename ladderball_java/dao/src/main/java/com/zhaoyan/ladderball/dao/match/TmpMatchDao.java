@@ -20,4 +20,9 @@ public interface TmpMatchDao {
      * 修改一场比赛
      */
     boolean modifyMatch(long id, int playerNumber, int totalPart, int partMinutes);
+
+    /**
+     * 添加一场比赛
+     */
+    TmpMatch addMatch(TmpMatch match);
 }

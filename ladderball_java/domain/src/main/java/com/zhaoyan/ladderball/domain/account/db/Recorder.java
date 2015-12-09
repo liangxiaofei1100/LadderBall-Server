@@ -2,11 +2,14 @@ package com.zhaoyan.ladderball.domain.account.db;
 
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity(name = "recorder")
 public class Recorder {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public long id;
     public String phone;
     public String password;

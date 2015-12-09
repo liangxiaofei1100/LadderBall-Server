@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class TmpMatchService extends BaseService{
+public class TmpMatchService extends BaseService {
     Logger logger = LoggerFactory.getLogger(TmpMatchService.class);
 
     @Autowired
@@ -71,7 +71,9 @@ public class TmpMatchService extends BaseService{
                 if (tmpMatch != null) {
                     MatchListResponse.Match match = new MatchListResponse.Match();
                     copierTmpMatchToMatchListResponse.copy(tmpMatch, match, null);
-                    match.startTime = tmpMatch.startTime.getTime();
+                    if (tmpMatch.startTime != null) {
+                        match.startTime = tmpMatch.startTime.getTime();
+                    }
 
                     // 获取主队和客队信息
                     TmpTeamOfMatch tmpTeamHome = tmpTeamOfMatchDao.getTmpTeamOfMatch(tmpMatch.teamHome);
@@ -111,7 +113,9 @@ public class TmpMatchService extends BaseService{
             response.totalPart = match.totalPart;
             response.playerNumber = match.playerNumber;
             response.address = match.address;
-            response.startTime = match.startTime.getTime();
+            if (match.startTime != null) {
+                response.startTime = match.startTime.getTime();
+            }
             // 队伍数据
             long recorderId = getRecorderIdFromUserToken(request.header.userToken);
 
@@ -147,7 +151,7 @@ public class TmpMatchService extends BaseService{
             // TODO 暂时没有小节数据，先模拟
             response.partDatas = new ArrayList<>();
             // 小节号从1开始
-            for(int i = 1; i<= response.totalPart; i++) {
+            for (int i = 1; i <= response.totalPart; i++) {
                 MatchDetailResponse.PartData partData = new MatchDetailResponse.PartData();
                 partData.partNumber = i;
                 partData.isComplete = false;
@@ -191,7 +195,7 @@ public class TmpMatchService extends BaseService{
             return response;
         }
 
-        for(TmpMatchModifyRequest.Player player : request.players) {
+        for (TmpMatchModifyRequest.Player player : request.players) {
             TmpPlayerOfMatch newPlayer = new TmpPlayerOfMatch();
             copierTmpMatchModifyRequestToTmpPlayerOfMatch.copy(player, newPlayer, null);
             boolean playerResult = tmpPlayerOfMatchDao.modifyPlayer(newPlayer);
@@ -199,6 +203,36 @@ public class TmpMatchService extends BaseService{
                 logger.warn("modifyTmpMatch() modify player fail. playerId: " + player.id);
             }
         }
+        return response;
+    }
+
+    /**
+     * 添加一场练习赛
+     */
+    public AddTmpMatchResponse addMatch(AddTmpMatchRequest request) {
+        // 添加主队
+        TmpTeamOfMatch teamHome = new TmpTeamOfMatch();
+        teamHome.name = request.teamHomeName;
+        tmpTeamOfMatchDao.addTmpTeamOfMatch(teamHome);
+        // 添加客队
+        TmpTeamOfMatch teamVisitor = new TmpTeamOfMatch();
+        teamVisitor.name = request.teamVisitorName;
+        tmpTeamOfMatchDao.addTmpTeamOfMatch(teamVisitor);
+        // 添加比赛
+        TmpMatch match = new TmpMatch();
+        match.teamHome = teamHome.id;
+        match.teamVisitor = teamVisitor.id;
+        match.playerNumber = request.playerNumber;
+        tmpMatchDao.addMatch(match);
+        // 将比赛分配给记录者，并且认领主队
+        RecorderTmpMatch recorderTmpMatch = new RecorderTmpMatch();
+        recorderTmpMatch.recorderId = getRecorderIdFromUserToken(request.header.userToken);
+        recorderTmpMatch.matchId = match.id;
+        recorderTmpMatch.asignedTeam = RecorderTmpMatch.ASIGNED_TEAM_HOME;
+        recorderTmpMatchDao.addRecorderTmpMatch(recorderTmpMatch);
+
+        AddTmpMatchResponse response = new AddTmpMatchResponse();
+        response.buildOk();
         return response;
     }
 }

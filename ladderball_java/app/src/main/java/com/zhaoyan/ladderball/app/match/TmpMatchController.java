@@ -46,4 +46,13 @@ public class TmpMatchController {
         TmpMatchModifyResponse response = tmpMatchService.modifyTmpMatch(request);
         return response;
     }
+
+    @RequestMapping(value = "/add", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+    public
+    @ResponseBody
+    AddTmpMatchResponse addMatch(@RequestBody AddTmpMatchRequest request) {
+        logger.debug("addMatch() AddTmpMatchRequest: " + request);
+        AddTmpMatchResponse response = tmpMatchService.addMatch(request);
+        return response;
+    }
 }
