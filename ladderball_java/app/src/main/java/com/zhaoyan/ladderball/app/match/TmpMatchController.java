@@ -38,4 +38,13 @@ public class TmpMatchController {
         TmpMatchDetailResponse response = tmpMatchService.getTmpMatchDetail(request);
         return response;
     }
+
+    @RequestMapping(value = "/modify", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+    public
+    @ResponseBody
+    TmpMatchModifyResponse modifyMatch(@RequestBody TmpMatchModifyRequest request) {
+        logger.debug("getMatchDetail() TmpMatchModifyRequest: " + request);
+        TmpMatchModifyResponse response = tmpMatchService.modifyTmpMatch(request);
+        return response;
+    }
 }

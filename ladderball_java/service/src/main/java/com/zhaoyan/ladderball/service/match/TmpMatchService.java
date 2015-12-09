@@ -49,6 +49,8 @@ public class TmpMatchService extends BaseService{
             BeanCopier.create(TmpTeamOfMatch.class, TmpMatchDetailResponse.Team.class, false);
     private static BeanCopier copierTmpPlayerOfMatchToTmpMatchDetailResponse =
             BeanCopier.create(TmpPlayerOfMatch.class, TmpMatchDetailResponse.Player.class, false);
+    private static BeanCopier copierTmpMatchModifyRequestToTmpPlayerOfMatch =
+            BeanCopier.create(TmpMatchModifyRequest.Player.class, TmpPlayerOfMatch.class, false);
 
     /**
      * 获取练习赛列表
@@ -174,5 +176,29 @@ public class TmpMatchService extends BaseService{
         }
 
         return players;
+    }
+
+    /**
+     * 修改练习赛
+     */
+    public TmpMatchModifyResponse modifyTmpMatch(TmpMatchModifyRequest request) {
+        TmpMatchModifyResponse response = new TmpMatchModifyResponse();
+        response.buildOk();
+        boolean result = tmpMatchDao.modifyMatch(request.matchId, request.playerNumber, request.totalPart, request.partMinutes);
+        if (!result) {
+            logger.warn("modifyTmpMatch() modify match fail. matchId: " + request.matchId);
+            response.buildFail();
+            return response;
+        }
+
+        for(TmpMatchModifyRequest.Player player : request.players) {
+            TmpPlayerOfMatch newPlayer = new TmpPlayerOfMatch();
+            copierTmpMatchModifyRequestToTmpPlayerOfMatch.copy(player, newPlayer, null);
+            boolean playerResult = tmpPlayerOfMatchDao.modifyPlayer(newPlayer);
+            if (!playerResult) {
+                logger.warn("modifyTmpMatch() modify player fail. playerId: " + player.id);
+            }
+        }
+        return response;
     }
 }

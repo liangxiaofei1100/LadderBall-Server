@@ -29,6 +29,15 @@ public class HibernateTmpMatchDao implements TmpMatchDao{
 
     @Override
     public boolean modifyMatch(long id, int playerNumber, int totalPart, int partMinutes) {
-        return false;
+        TmpMatch match = hibernateTemplate.get(TmpMatch.class, id);
+        if (match == null) {
+            return false;
+        }
+        match.playerNumber = playerNumber;
+        match.totalPart = totalPart;
+        match.partMinutes = partMinutes;
+
+        hibernateTemplate.update(match);
+        return true;
     }
 }
