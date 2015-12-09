@@ -41,22 +41,22 @@ public class TmpMatchService extends BaseService{
     @Qualifier("hibernateTmpPlayerOfMatchDao")
     TmpPlayerOfMatchDao tmpPlayerOfMatchDao;
 
-    private static BeanCopier copierTmpMatchToTmpMatchListResponse =
-            BeanCopier.create(TmpMatch.class, TmpMatchListResponse.Match.class, false);
-    private static BeanCopier copierTmpTeamOfMatchToTmpMatchListResponse =
-            BeanCopier.create(TmpTeamOfMatch.class, TmpMatchListResponse.Team.class, false);
-    private static BeanCopier copierTmpTeamOfMatchToTmpMatchDetailResponse =
-            BeanCopier.create(TmpTeamOfMatch.class, TmpMatchDetailResponse.Team.class, false);
-    private static BeanCopier copierTmpPlayerOfMatchToTmpMatchDetailResponse =
-            BeanCopier.create(TmpPlayerOfMatch.class, TmpMatchDetailResponse.Player.class, false);
+    private static BeanCopier copierTmpMatchToMatchListResponse =
+            BeanCopier.create(TmpMatch.class, MatchListResponse.Match.class, false);
+    private static BeanCopier copierTmpTeamOfMatchToMatchListResponse =
+            BeanCopier.create(TmpTeamOfMatch.class, MatchListResponse.Team.class, false);
+    private static BeanCopier copierTmpTeamOfMatchToMatchDetailResponse =
+            BeanCopier.create(TmpTeamOfMatch.class, MatchDetailResponse.Team.class, false);
+    private static BeanCopier copierTmpPlayerOfMatchToMatchDetailResponse =
+            BeanCopier.create(TmpPlayerOfMatch.class, MatchDetailResponse.Player.class, false);
     private static BeanCopier copierTmpMatchModifyRequestToTmpPlayerOfMatch =
             BeanCopier.create(TmpMatchModifyRequest.Player.class, TmpPlayerOfMatch.class, false);
 
     /**
      * 获取练习赛列表
      */
-    public TmpMatchListResponse getTmpMatchList(TmpMatchListRequest request) {
-        TmpMatchListResponse response = new TmpMatchListResponse();
+    public MatchListResponse getMatchList(MatchListRequest request) {
+        MatchListResponse response = new MatchListResponse();
         response.buildOk();
         response.matches = new ArrayList<>();
 
@@ -69,22 +69,22 @@ public class TmpMatchService extends BaseService{
                 TmpMatch tmpMatch = tmpMatchDao.getMatch(recorderTmpMatch.matchId);
 
                 if (tmpMatch != null) {
-                    TmpMatchListResponse.Match match = new TmpMatchListResponse.Match();
-                    copierTmpMatchToTmpMatchListResponse.copy(tmpMatch, match, null);
+                    MatchListResponse.Match match = new MatchListResponse.Match();
+                    copierTmpMatchToMatchListResponse.copy(tmpMatch, match, null);
                     match.startTime = tmpMatch.startTime.getTime();
 
                     // 获取主队和客队信息
                     TmpTeamOfMatch tmpTeamHome = tmpTeamOfMatchDao.getTmpTeamOfMatch(tmpMatch.teamHome);
                     if (tmpTeamHome != null) {
-                        match.teamHome = new TmpMatchListResponse.Team();
-                        copierTmpTeamOfMatchToTmpMatchListResponse.copy(tmpTeamHome, match.teamHome, null);
+                        match.teamHome = new MatchListResponse.Team();
+                        copierTmpTeamOfMatchToMatchListResponse.copy(tmpTeamHome, match.teamHome, null);
                         match.teamHome.isAsigned = recorderTmpMatch.asignedTeam == RecorderTmpMatch.ASIGNED_TEAM_HOME;
                     }
 
                     TmpTeamOfMatch tmpTeamVisitor = tmpTeamOfMatchDao.getTmpTeamOfMatch(tmpMatch.teamVisitor);
                     if (tmpTeamVisitor != null) {
-                        match.teamVisitor = new TmpMatchListResponse.Team();
-                        copierTmpTeamOfMatchToTmpMatchListResponse.copy(tmpTeamVisitor, match.teamVisitor, null);
+                        match.teamVisitor = new MatchListResponse.Team();
+                        copierTmpTeamOfMatchToMatchListResponse.copy(tmpTeamVisitor, match.teamVisitor, null);
                         match.teamVisitor.isAsigned = recorderTmpMatch.asignedTeam == RecorderTmpMatch.ASIGNED_TEAM_VISITOR;
                     }
 
@@ -99,8 +99,8 @@ public class TmpMatchService extends BaseService{
     /**
      * 获取练习赛详情
      */
-    public TmpMatchDetailResponse getTmpMatchDetail(TmpMatchDetailRequest request) {
-        TmpMatchDetailResponse response = new TmpMatchDetailResponse();
+    public MatchDetailResponse getMatchDetail(MatchDetailRequest request) {
+        MatchDetailResponse response = new MatchDetailResponse();
 
         TmpMatch match = tmpMatchDao.getMatch(request.matchId);
         if (match != null) {
@@ -121,8 +121,8 @@ public class TmpMatchService extends BaseService{
             // 获取主队和客队信息
             TmpTeamOfMatch teamHome = tmpTeamOfMatchDao.getTmpTeamOfMatch(match.teamHome);
             if (teamHome != null) {
-                response.teamHome = new TmpMatchDetailResponse.Team();
-                copierTmpTeamOfMatchToTmpMatchDetailResponse.copy(teamHome, response.teamHome, null);
+                response.teamHome = new MatchDetailResponse.Team();
+                copierTmpTeamOfMatchToMatchDetailResponse.copy(teamHome, response.teamHome, null);
                 if (recorderMatch != null) {
                     response.teamHome.isAsigned = recorderMatch.asignedTeam == RecorderMatch.ASIGNED_TEAM_HOME;
                     if (response.teamHome.isAsigned) {
@@ -133,8 +133,8 @@ public class TmpMatchService extends BaseService{
 
             TmpTeamOfMatch teamVisitor = tmpTeamOfMatchDao.getTmpTeamOfMatch(match.teamVisitor);
             if (teamHome != null) {
-                response.teamVisitor = new TmpMatchDetailResponse.Team();
-                copierTmpTeamOfMatchToTmpMatchDetailResponse.copy(teamVisitor, response.teamVisitor, null);
+                response.teamVisitor = new MatchDetailResponse.Team();
+                copierTmpTeamOfMatchToMatchDetailResponse.copy(teamVisitor, response.teamVisitor, null);
                 if (recorderMatch != null) {
                     response.teamVisitor.isAsigned = recorderMatch.asignedTeam == RecorderMatch.ASIGNED_TEAM_VISITOR;
                     if (response.teamVisitor.isAsigned) {
@@ -148,7 +148,7 @@ public class TmpMatchService extends BaseService{
             response.partDatas = new ArrayList<>();
             // 小节号从1开始
             for(int i = 1; i<= response.totalPart; i++) {
-                TmpMatchDetailResponse.PartData partData = new TmpMatchDetailResponse.PartData();
+                MatchDetailResponse.PartData partData = new MatchDetailResponse.PartData();
                 partData.partNumber = i;
                 partData.isComplete = false;
 
@@ -161,14 +161,14 @@ public class TmpMatchService extends BaseService{
         return response;
     }
 
-    private List<TmpMatchDetailResponse.Player> getPlayers(long teamId) {
-        List<TmpMatchDetailResponse.Player> players = new ArrayList<>();
+    private List<MatchDetailResponse.Player> getPlayers(long teamId) {
+        List<MatchDetailResponse.Player> players = new ArrayList<>();
 
         List<TmpPlayerOfMatch> playerOfMatches = tmpPlayerOfMatchDao.getPlayerByTeam(teamId);
         if (playerOfMatches != null) {
             for (TmpPlayerOfMatch p : playerOfMatches) {
-                TmpMatchDetailResponse.Player player = new TmpMatchDetailResponse.Player();
-                copierTmpPlayerOfMatchToTmpMatchDetailResponse.copy(p, player, null);
+                MatchDetailResponse.Player player = new MatchDetailResponse.Player();
+                copierTmpPlayerOfMatchToMatchDetailResponse.copy(p, player, null);
                 players.add(player);
             }
         } else {
