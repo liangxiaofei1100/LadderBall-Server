@@ -4,8 +4,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
-@Entity(name = "playerofmatch")
-public class PlayerOfMatch {
+@Entity(name = "tmpplayerofmatch")
+public class TmpPlayerOfMatch {
     @Id
     public long id;
     @Column(name = "name")

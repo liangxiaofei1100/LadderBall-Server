@@ -38,6 +38,10 @@ public class EventCollectionRequest extends Request{
          * 额外数据
          */
         public String additionalData;
+        /**
+         * 事件的uuid，避免重复
+         */
+        public String uuid;
 
         public int getEventCode() {
             return eventCode;
@@ -95,16 +99,25 @@ public class EventCollectionRequest extends Request{
             this.additionalData = additionalData;
         }
 
+        public String getUuid() {
+            return uuid;
+        }
+
+        public void setUuid(String uuid) {
+            this.uuid = uuid;
+        }
+
         @Override
         public String toString() {
             return "Event{" +
                     "eventCode=" + eventCode +
-                    ", matchId=" + matchId +
+                    ", teamId=" + matchId +
                     ", teamId=" + teamId +
                     ", playerId=" + playerId +
                     ", partNumber=" + partNumber +
                     ", timeSecond=" + timeSecond +
                     ", additionalData='" + additionalData + '\'' +
+                    ", uuid='" + uuid + '\'' +
                     '}';
         }
     }

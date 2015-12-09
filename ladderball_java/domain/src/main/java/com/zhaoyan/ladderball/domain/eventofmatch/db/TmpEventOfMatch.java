@@ -4,8 +4,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
-@Entity(name = "eventofmatch")
-public class EventOfMatch {
+@Entity(name = "tmpeventofmatch")
+public class TmpEventOfMatch {
 
     @Id
     public long id;
@@ -100,7 +100,7 @@ public class EventOfMatch {
 
     @Override
     public String toString() {
-        return "EventOfMatch{" +
+        return "TmpEventOfMatch{" +
                 "id=" + id +
                 ", eventCode=" + eventCode +
                 ", teamId=" + matchId +

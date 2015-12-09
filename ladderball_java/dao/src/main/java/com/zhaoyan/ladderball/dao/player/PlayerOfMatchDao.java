@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface PlayerOfMatchDao {
 
-    List<PlayerOfMatch> getPlayerByTeam(long matchId);
+    List<PlayerOfMatch> getPlayerByTeam(long teamId);
 
     boolean modifyPlayer(PlayerOfMatch newPlayer);
 }
