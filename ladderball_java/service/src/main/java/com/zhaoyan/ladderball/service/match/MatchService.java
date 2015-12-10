@@ -1,10 +1,12 @@
 package com.zhaoyan.ladderball.service.match;
 
 import com.zhaoyan.ladderball.dao.match.MatchDao;
+import com.zhaoyan.ladderball.dao.match.MatchPartDao;
 import com.zhaoyan.ladderball.dao.player.PlayerOfMatchDao;
 import com.zhaoyan.ladderball.dao.recordermatch.RecorderMatchDao;
 import com.zhaoyan.ladderball.dao.teamofmatch.TeamOfMatchDao;
 import com.zhaoyan.ladderball.domain.match.db.Match;
+import com.zhaoyan.ladderball.domain.match.db.MatchPart;
 import com.zhaoyan.ladderball.domain.match.http.*;
 import com.zhaoyan.ladderball.domain.player.db.PlayerOfMatch;
 import com.zhaoyan.ladderball.domain.recordermatch.db.RecorderMatch;
@@ -39,6 +41,10 @@ public class MatchService extends BaseService {
     @Autowired
     @Qualifier("hibernatePlayerOfMatchDao")
     PlayerOfMatchDao playerOfMatchDao;
+
+    @Autowired
+    @Qualifier("hibernateMatchPartDao")
+    MatchPartDao matchPartDao;
 
     private static BeanCopier copierMatchToMatchListResponse =
             BeanCopier.create(Match.class, MatchListResponse.Match.class, false);
@@ -146,13 +152,13 @@ public class MatchService extends BaseService {
             }
 
             // 小节数据
-            // TODO 暂时没有小节数据，先模拟
             response.partDatas = new ArrayList<>();
-            // 小节号从1开始
-            for(int i = 1; i<= response.totalPart; i++) {
+            List<MatchPart> matchParts = matchPartDao.getMatchParts(request.matchId);
+            for (MatchPart part : matchParts) {
+
                 MatchDetailResponse.PartData partData = new MatchDetailResponse.PartData();
-                partData.partNumber = i;
-                partData.isComplete = false;
+                partData.partNumber = part.partNumber;
+                partData.isComplete = part.isComplete;
 
                 response.partDatas.add(partData);
             }
@@ -186,14 +192,34 @@ public class MatchService extends BaseService {
     public MatchModifyResponse modifyMatch(MatchModifyRequest request) {
         MatchModifyResponse response = new MatchModifyResponse();
         response.buildOk();
+        // 修改比赛表
         boolean result = matchDao.modifyMatch(request.matchId, request.playerNumber, request.totalPart, request.partMinutes);
         if (!result) {
             logger.warn("modifyMatch() modify match fail. matchId: " + request.matchId);
             response.buildFail();
             return response;
         }
+        // 修改比赛小节数据
+        List<MatchPart> matchParts = matchPartDao.getMatchParts(request.matchId);
+        if (request.totalPart > matchParts.size()) {
+            // 节数增加了
+            for (int i = matchParts.size() + 1; i <= request.totalPart; i++) {
+                MatchPart matchPart = new MatchPart();
+                matchPart.matchId = request.matchId;
+                matchPart.partNumber = i;
+                matchPart.isComplete = false;
+                matchPartDao.addMatchPart(matchPart);
+            }
+        } else if (request.totalPart < matchParts.size()) {
+            // 节数减少了
+            for (MatchPart matchPart : matchParts) {
+                if (matchPart.partNumber > request.totalPart) {
+                    matchPartDao.deleteMatchPart(matchPart.id);
+                }
+            }
+        }
 
-        for(MatchModifyRequest.Player player : request.players) {
+        for (MatchModifyRequest.Player player : request.players) {
             PlayerOfMatch newPlayer = new PlayerOfMatch();
             copierMatchModifyReqestToPlayer.copy(player, newPlayer, null);
             boolean playerResult = playerOfMatchDao.modifyPlayer(newPlayer);

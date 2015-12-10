@@ -31,6 +31,7 @@ package com.zhaoyan.ladderball.domain.eventofmatch;
 | 犯规		| 10026		|			|
 | 乌龙球		| 10027		|			|
 | 换人		| 10028		|			|
+| 小节结束	| 20001		|			|
  */
 public class EventCode {
     /**
@@ -145,4 +146,8 @@ public class EventCode {
      * 换人
      */
     public static final int EVENT_HUAN_REN = 10028;
+    /**
+     * 小节结束
+     */
+    public static final int EVENT_XIAO_JIE_JIE_SHU = 20001;
 }
