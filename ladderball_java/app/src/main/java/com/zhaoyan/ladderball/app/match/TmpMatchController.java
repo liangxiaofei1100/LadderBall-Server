@@ -43,6 +43,18 @@ public class TmpMatchController {
         return response;
     }
 
+    /**
+     * 记录者领取练习赛，只能领取客场队伍
+     */
+    @RequestMapping(value = "/asignvisitor", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+    public
+    @ResponseBody
+    TmpMatchAsignVisitorResponse asignTmpMatchVisitor(@RequestBody TmpMatchAsignVisitorRequest request) {
+        logger.debug("asignTmpMatchVisitor() TmpMatchAsignVisitorRequest: " + request);
+        TmpMatchAsignVisitorResponse response = tmpMatchService.asignTmpMatchVisitor(request);
+        return response;
+    }
+
     @RequestMapping(value = "/detail", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
     public
     @ResponseBody

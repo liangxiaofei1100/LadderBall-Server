@@ -25,4 +25,14 @@ public interface RecorderTmpMatchDao {
      * 获取该记录这可以领取的练习赛
      */
     List<RecorderTmpMatch> getToAsignTmpMatchByRecorder(long recorderId);
+
+    /**
+     * 记录者是否已经领取了练习赛
+     */
+    boolean isTmpMatchAsignedToRecorder(long recorderId, long matchId);
+
+    /**
+     * 记录者领取练习赛，只能领取客场队伍
+     */
+    boolean asignTmpMatchVisitor(long recorderId, long matchId);
 }

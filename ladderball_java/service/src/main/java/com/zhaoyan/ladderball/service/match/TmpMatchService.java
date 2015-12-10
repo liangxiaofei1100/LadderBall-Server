@@ -281,4 +281,26 @@ public class TmpMatchService extends BaseService {
 
         return response;
     }
+
+    /**
+     *记录者领取练习赛，只能领取客场队伍
+     */
+    public TmpMatchAsignVisitorResponse asignTmpMatchVisitor(TmpMatchAsignVisitorRequest request) {
+        TmpMatchAsignVisitorResponse response = new TmpMatchAsignVisitorResponse();
+
+        long recorderId = getRecorderIdFromUserToken(request.header.userToken);
+        boolean isAlreadyAsigned = recorderTmpMatchDao.isTmpMatchAsignedToRecorder(recorderId, request.matchId);
+        if (isAlreadyAsigned) {
+            response.buildFail("已经认领过该比赛");
+        } else {
+            boolean result = recorderTmpMatchDao.asignTmpMatchVisitor(recorderId, request.matchId);
+            if (result) {
+                response.buildOk();
+            } else {
+                response.buildFail("认领失败");
+            }
+        }
+
+        return response;
+    }
 }

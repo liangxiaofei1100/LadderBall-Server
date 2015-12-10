@@ -61,4 +61,40 @@ public class HibernateRecorderTmpMatchDao implements RecorderTmpMatchDao{
         List<RecorderTmpMatch> recorderTmpMatches = (List<RecorderTmpMatch>) hibernateTemplate.findByCriteria(criteria);
         return recorderTmpMatches;
     }
+
+    @Override
+    public boolean isTmpMatchAsignedToRecorder(long recorderId, long matchId) {
+        DetachedCriteria criteria = DetachedCriteria.forClass(RecorderTmpMatch.class);
+        criteria.add(Restrictions.eq("recorderId", recorderId));
+        criteria.add(Restrictions.eq("matchId", matchId));
+        List<RecorderTmpMatch> recorderTmpMatches = (List<RecorderTmpMatch>) hibernateTemplate.findByCriteria(criteria);
+
+        return !recorderTmpMatches.isEmpty();
+    }
+
+    @Override
+    public boolean asignTmpMatchVisitor(long recorderId, long matchId) {
+        RecorderTmpMatch recorderTmpMatch = new RecorderTmpMatch();
+        recorderTmpMatch.recorderId = recorderId;
+        recorderTmpMatch.matchId = matchId;
+        recorderTmpMatch.asignedTeam = RecorderTmpMatch.ASIGNED_TEAM_VISITOR;
+        // 这场比赛的两个队伍都被认领
+        recorderTmpMatch.isMatchAsigned = true;
+        hibernateTemplate.save(recorderTmpMatch);
+
+        // 将这场比赛的另一个认领者的比赛也修改为比赛已被认领完。
+        DetachedCriteria criteria = DetachedCriteria.forClass(RecorderTmpMatch.class);
+        // 认领的是其他记录者
+        criteria.add(Restrictions.ne("recorderId", recorderId));
+        criteria.add(Restrictions.eq("matchId", matchId));
+        List<RecorderTmpMatch> recorderTmpMatches = (List<RecorderTmpMatch>) hibernateTemplate.findByCriteria(criteria);
+        if (recorderTmpMatches != null) {
+            for(RecorderTmpMatch r : recorderTmpMatches) {
+                r.isMatchAsigned = true;
+                hibernateTemplate.update(r);
+            }
+        }
+
+        return true;
+    }
 }
