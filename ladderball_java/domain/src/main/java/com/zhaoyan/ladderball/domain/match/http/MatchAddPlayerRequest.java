@@ -3,12 +3,10 @@ package com.zhaoyan.ladderball.domain.match.http;
 
 import com.zhaoyan.ladderball.domain.common.http.Request;
 
-import java.util.List;
-
 public class MatchAddPlayerRequest extends Request {
     public long matchId;
     public long teamId;
-    public List<Player> players;
+    public Player player;
 
     public static class Player {
         public String name;
@@ -51,10 +49,10 @@ public class MatchAddPlayerRequest extends Request {
 
     @Override
     public String toString() {
-        return super.toString() + "MatchAddPlayerRequest{" +
+        return "MatchAddPlayerRequest{" +
                 "matchId=" + matchId +
                 ", teamId=" + teamId +
-                ", players=" + players +
+                ", player=" + player +
                 '}';
     }
 }

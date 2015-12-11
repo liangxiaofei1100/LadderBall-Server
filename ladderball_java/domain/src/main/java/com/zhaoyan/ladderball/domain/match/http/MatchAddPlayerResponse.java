@@ -2,11 +2,10 @@ package com.zhaoyan.ladderball.domain.match.http;
 
 import com.zhaoyan.ladderball.domain.common.http.Response;
 
-import java.util.List;
 
 public class MatchAddPlayerResponse extends Response{
 
-    public List<Player> players;
+    public Player player;
 
     public static class Player {
         public long id;

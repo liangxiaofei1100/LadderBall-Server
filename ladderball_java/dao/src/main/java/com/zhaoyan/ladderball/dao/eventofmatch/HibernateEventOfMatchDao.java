@@ -31,4 +31,13 @@ public class HibernateEventOfMatchDao implements EventOfMatchDao{
             return false;
         }
     }
+
+    @Override
+    public int getEventCountByPlayer(int eventCode, long playerId) {
+        DetachedCriteria criteria = DetachedCriteria.forClass(EventOfMatch.class);
+        criteria.add(Restrictions.eq("eventCode", eventCode));
+        criteria.add(Restrictions.eq("playerId", playerId));
+        List<?> events = hibernateTemplate.findByCriteria(criteria);
+        return events.size();
+    }
 }

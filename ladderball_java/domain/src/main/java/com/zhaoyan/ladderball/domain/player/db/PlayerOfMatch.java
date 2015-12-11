@@ -15,6 +15,9 @@ public class PlayerOfMatch {
     public long teamId;
     @Column(name = "is_first")
     public boolean isFirst;
+    @Column(name = "event10001")
+    public int event10001;
+
 
     public long getId() {
         return id;

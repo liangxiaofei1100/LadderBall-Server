@@ -226,7 +226,7 @@ public class MatchService extends BaseService {
         }
 
         for (MatchModifyRequest.Player player : request.players) {
-            PlayerOfMatch newPlayer = new PlayerOfMatch();
+            PlayerOfMatch newPlayer = playerOfMatchDao.getPlayerByPlayerOfMatchId(player.id);
             copierMatchModifyReqestToPlayer.copy(player, newPlayer, null);
             boolean playerResult = playerOfMatchDao.modifyPlayer(newPlayer);
             if (!playerResult) {
@@ -241,24 +241,29 @@ public class MatchService extends BaseService {
      */
     public MatchAddPlayerResponse addPlayer(MatchAddPlayerRequest request) {
         MatchAddPlayerResponse response = new MatchAddPlayerResponse();
-        response.players = new ArrayList<>();
 
-        for (MatchAddPlayerRequest.Player player : request.players) {
-            // 添加球员到数据库
-            PlayerOfMatch playerOfMatch = new PlayerOfMatch();
-            copierMatchAddPlayerRequestToPlayer.copy(player, playerOfMatch, null);
-            playerOfMatch.teamId = request.teamId;
+        PlayerOfMatch playerOfMatch = new PlayerOfMatch();
+        copierMatchAddPlayerRequestToPlayer.copy(request.player, playerOfMatch, null);
+        playerOfMatch.teamId = request.teamId;
+
+        // 不能添加重复号码的球员
+        boolean isRepeatedNumber = playerOfMatchDao.isPlayerNumberRepeated(playerOfMatch);
+        if (isRepeatedNumber) {
+            response.buildFail("不能添加重复号码的球员");
+        } else {
             boolean result = playerOfMatchDao.addPlayer(playerOfMatch);
 
             if (result) {
                 // 将结果添加到response
                 MatchAddPlayerResponse.Player resultPlayer = new MatchAddPlayerResponse.Player();
                 copierPlayerOfMatchToMatchAddPlayerResponse.copy(playerOfMatch, resultPlayer, null);
-                response.players.add(resultPlayer);
+                response.buildOk();
+
+                response.player = resultPlayer;
+            } else {
+                response.buildFail("添加球员失败");
             }
         }
-
-        response.buildOk();
 
         return response;
     }
