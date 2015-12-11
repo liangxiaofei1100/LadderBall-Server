@@ -10,4 +10,6 @@ public interface PlayerOfMatchDao {
     List<PlayerOfMatch> getPlayerByTeam(long teamId);
 
     boolean modifyPlayer(PlayerOfMatch newPlayer);
+
+    boolean addPlayer(PlayerOfMatch player);
 }

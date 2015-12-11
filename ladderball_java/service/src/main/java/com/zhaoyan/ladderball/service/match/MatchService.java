@@ -57,6 +57,12 @@ public class MatchService extends BaseService {
     private static BeanCopier copierMatchModifyReqestToPlayer =
             BeanCopier.create(MatchModifyRequest.Player.class, PlayerOfMatch.class, false);
 
+    // 添加球员
+    private static BeanCopier copierMatchAddPlayerRequestToPlayer =
+            BeanCopier.create(MatchAddPlayerRequest.Player.class, PlayerOfMatch.class, false);
+    private static BeanCopier copierPlayerOfMatchToMatchAddPlayerResponse =
+            BeanCopier.create(PlayerOfMatch.class, MatchAddPlayerResponse.Player.class, false);
+
     /**
      * 获取当前用户的比赛
      */
@@ -227,6 +233,33 @@ public class MatchService extends BaseService {
                 logger.warn("modifyMatch() modify player fail. playerId: " + player.id);
             }
         }
+        return response;
+    }
+
+    /**
+     * 添加球员
+     */
+    public MatchAddPlayerResponse addPlayer(MatchAddPlayerRequest request) {
+        MatchAddPlayerResponse response = new MatchAddPlayerResponse();
+        response.players = new ArrayList<>();
+
+        for (MatchAddPlayerRequest.Player player : request.players) {
+            // 添加球员到数据库
+            PlayerOfMatch playerOfMatch = new PlayerOfMatch();
+            copierMatchAddPlayerRequestToPlayer.copy(player, playerOfMatch, null);
+            playerOfMatch.teamId = request.teamId;
+            boolean result = playerOfMatchDao.addPlayer(playerOfMatch);
+
+            if (result) {
+                // 将结果添加到response
+                MatchAddPlayerResponse.Player resultPlayer = new MatchAddPlayerResponse.Player();
+                copierPlayerOfMatchToMatchAddPlayerResponse.copy(playerOfMatch, resultPlayer, null);
+                response.players.add(resultPlayer);
+            }
+        }
+
+        response.buildOk();
+
         return response;
     }
 }

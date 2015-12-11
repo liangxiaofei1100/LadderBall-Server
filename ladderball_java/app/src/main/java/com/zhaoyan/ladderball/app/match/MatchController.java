@@ -48,4 +48,16 @@ public class MatchController {
         return response;
     }
 
+    /**
+     * 添加球员
+     */
+    @RequestMapping(value = "/addplayer", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+    public
+    @ResponseBody
+    MatchAddPlayerResponse addPlayer(@RequestBody MatchAddPlayerRequest request) {
+        logger.debug("addPlayer() MatchAddPlayerRequest: " + request);
+        MatchAddPlayerResponse response = matchService.addPlayer(request);
+        return response;
+    }
+
 }

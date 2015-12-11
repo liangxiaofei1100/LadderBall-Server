@@ -35,4 +35,22 @@ public class HibernatePlayerOfMatchDao implements PlayerOfMatchDao {
         hibernateTemplate.save(player);
         return true;
     }
+
+    @Override
+    public boolean addPlayer(PlayerOfMatch player) {
+        // 查询同一个球队相同号码的球员
+        DetachedCriteria criteria = DetachedCriteria.forClass(PlayerOfMatch.class);
+        criteria.add(Restrictions.eq("teamId", player.teamId));
+        criteria.add(Restrictions.eq("number", player.number));
+        List<PlayerOfMatch> playerOfMatches = (List<PlayerOfMatch>) hibernateTemplate.findByCriteria(criteria);
+        // 不能添加重复号码的球员
+        if (playerOfMatches.isEmpty()) {
+            hibernateTemplate.save(player);
+            hibernateTemplate.flush();
+            hibernateTemplate.clear();
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

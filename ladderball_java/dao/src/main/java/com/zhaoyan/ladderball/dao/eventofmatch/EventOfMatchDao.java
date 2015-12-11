@@ -7,5 +7,5 @@ public interface EventOfMatchDao {
     /**
      * 添加一个事件
      */
-    void addEvent(EventOfMatch eventOfMatch);
+    boolean addEvent(EventOfMatch eventOfMatch);
 }

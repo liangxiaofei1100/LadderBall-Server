@@ -20,4 +20,9 @@ public interface MatchPartDao {
      * 删除一小节
      */
     void deleteMatchPart(long matchPartId);
+
+    /**
+     * 将小节设置为已完成
+     */
+    void setMatchPartComplete(long matchId, int partNumber, boolean isComplete);
 }

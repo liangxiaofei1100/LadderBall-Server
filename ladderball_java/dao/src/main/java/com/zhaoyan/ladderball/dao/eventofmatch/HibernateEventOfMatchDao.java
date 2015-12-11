@@ -17,7 +17,7 @@ public class HibernateEventOfMatchDao implements EventOfMatchDao{
 
 
     @Override
-    public void addEvent(EventOfMatch eventOfMatch) {
+    public boolean addEvent(EventOfMatch eventOfMatch) {
         DetachedCriteria criteria = DetachedCriteria.forClass(EventOfMatch.class);
         criteria.add(Restrictions.eq("uuid", eventOfMatch.uuid));
         List<?> events = hibernateTemplate.findByCriteria(criteria);
@@ -26,6 +26,9 @@ public class HibernateEventOfMatchDao implements EventOfMatchDao{
             hibernateTemplate.save(eventOfMatch);
             hibernateTemplate.flush();
             hibernateTemplate.clear();
+            return true;
+        } else {
+            return false;
         }
     }
 }

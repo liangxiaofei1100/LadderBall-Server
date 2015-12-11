@@ -38,4 +38,17 @@ public class HibernateMatchPartDao implements MatchPartDao {
             hibernateTemplate.delete(matchPart);
         }
     }
+
+    @Override
+    public void setMatchPartComplete(long matchId, int partNumber, boolean isComplete) {
+        DetachedCriteria criteria = DetachedCriteria.forClass(MatchPart.class);
+        criteria.add(Restrictions.eq("matchId", matchId));
+        criteria.add(Restrictions.eq("partNumber", partNumber));
+        List<MatchPart> matchParts = (List<MatchPart>) hibernateTemplate.findByCriteria(criteria);
+        if (!matchParts.isEmpty()) {
+            MatchPart matchPart = matchParts.get(0);
+            matchPart.isComplete = isComplete;
+            hibernateTemplate.update(matchPart);
+        }
+    }
 }
