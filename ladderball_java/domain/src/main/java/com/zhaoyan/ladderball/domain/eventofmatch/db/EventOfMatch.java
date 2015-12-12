@@ -1,5 +1,7 @@
 package com.zhaoyan.ladderball.domain.eventofmatch.db;
 
+import com.zhaoyan.ladderball.domain.player.db.PlayerOfMatch;
+
 import javax.persistence.*;
 
 @Entity(name = "eventofmatch")
@@ -7,22 +9,32 @@ public class EventOfMatch {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     public long id;
+
     @Column(name = "event_code")
     public int eventCode;
+
     @Column(name = "match_id")
     public long matchId;
+
     @Column(name = "team_id")
     public long teamId;
-    @Column(name = "player_id")
-    public long playerId;
+
+    @ManyToOne
+    @JoinColumn(name = "player_id")
+    public PlayerOfMatch playerOfMatch;
+
     @Column(name = "part_number")
     public int partNumber;
+
     @Column(name = "time_second")
     public long timeSecond;
+
     @Column(name = "additional_data")
     public String additionalData;
+
     @Column(name = "uuid")
     public String uuid;
+
 
     public long getId() {
         return id;
@@ -54,14 +66,6 @@ public class EventOfMatch {
 
     public void setTeamId(long teamId) {
         this.teamId = teamId;
-    }
-
-    public long getPlayerId() {
-        return playerId;
-    }
-
-    public void setPlayerId(long playerId) {
-        this.playerId = playerId;
     }
 
     public int getPartNumber() {
@@ -101,13 +105,13 @@ public class EventOfMatch {
         return "EventOfMatch{" +
                 "id=" + id +
                 ", eventCode=" + eventCode +
-                ", teamId=" + matchId +
+                ", matchId=" + matchId +
                 ", teamId=" + teamId +
-                ", playerId=" + playerId +
                 ", partNumber=" + partNumber +
                 ", timeSecond=" + timeSecond +
                 ", additionalData='" + additionalData + '\'' +
                 ", uuid='" + uuid + '\'' +
+                ", playerOfMatch=" + playerOfMatch +
                 '}';
     }
 }

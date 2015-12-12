@@ -58,4 +58,16 @@ public class PlayerOfMatch {
     public void setIsFirst(boolean isFirst) {
         this.isFirst = isFirst;
     }
+
+    @Override
+    public String toString() {
+        return "PlayerOfMatch{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", number=" + number +
+                ", teamId=" + teamId +
+                ", isFirst=" + isFirst +
+                ", event10001=" + event10001 +
+                '}';
+    }
 }

@@ -3,7 +3,14 @@ package com.zhaoyan.ladderball.dao.eventofmatch;
 
 import com.zhaoyan.ladderball.domain.eventofmatch.db.EventOfMatch;
 
+import java.util.List;
+
 public interface EventOfMatchDao {
+    /**
+     * 事件的uuid是否重复
+     */
+    boolean isEventUUIDRepeated(String uuid);
+
     /**
      * 添加一个事件
      */
@@ -13,4 +20,9 @@ public interface EventOfMatchDao {
      * 获取球员的一个事件总数
      */
     int getEventCountByPlayer(int eventCode, long playerId);
+
+    /**
+     * 获取比赛一小节的事件
+     */
+    List<EventOfMatch> getEventPartList(long matchId, long teamId, int partNumber);
 }
