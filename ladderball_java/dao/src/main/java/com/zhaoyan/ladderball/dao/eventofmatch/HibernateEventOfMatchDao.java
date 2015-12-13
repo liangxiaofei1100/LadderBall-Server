@@ -2,6 +2,7 @@ package com.zhaoyan.ladderball.dao.eventofmatch;
 
 import com.zhaoyan.ladderball.domain.eventofmatch.db.EventOfMatch;
 import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,6 +52,7 @@ public class HibernateEventOfMatchDao implements EventOfMatchDao {
         criteria.add(Restrictions.eq("matchId", matchId));
         criteria.add(Restrictions.eq("teamId", teamId));
         criteria.add(Restrictions.eq("partNumber", partNumber));
+        criteria.addOrder(Order.asc("timeSecond"));
         List<EventOfMatch> events = (List<EventOfMatch>) hibernateTemplate.findByCriteria(criteria);
 
         return events;

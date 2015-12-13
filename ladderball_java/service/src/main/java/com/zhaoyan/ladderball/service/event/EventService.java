@@ -4,10 +4,7 @@ import com.zhaoyan.ladderball.dao.eventofmatch.EventOfMatchDao;
 import com.zhaoyan.ladderball.dao.match.MatchPartDao;
 import com.zhaoyan.ladderball.dao.player.PlayerOfMatchDao;
 import com.zhaoyan.ladderball.domain.eventofmatch.db.EventOfMatch;
-import com.zhaoyan.ladderball.domain.eventofmatch.http.EventCollectionRequest;
-import com.zhaoyan.ladderball.domain.eventofmatch.http.EventCollectionResponse;
-import com.zhaoyan.ladderball.domain.eventofmatch.http.EventPartListRequest;
-import com.zhaoyan.ladderball.domain.eventofmatch.http.EventPartListResponse;
+import com.zhaoyan.ladderball.domain.eventofmatch.http.*;
 import com.zhaoyan.ladderball.service.event.handler.EventHandlerManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -106,6 +103,16 @@ public class EventService {
         }
 
         response.buildOk();
+        return response;
+    }
+
+    /**
+     * 删除事件
+     */
+    public EventDeleteResponse deleteEvent(EventDeleteRequest request) {
+        EventDeleteResponse response = new EventDeleteResponse();
+        response.buildFail("暂未实现");
+
         return response;
     }
 }

@@ -1,9 +1,6 @@
 package com.zhaoyan.ladderball.app.event;
 
-import com.zhaoyan.ladderball.domain.eventofmatch.http.EventCollectionRequest;
-import com.zhaoyan.ladderball.domain.eventofmatch.http.EventCollectionResponse;
-import com.zhaoyan.ladderball.domain.eventofmatch.http.EventPartListRequest;
-import com.zhaoyan.ladderball.domain.eventofmatch.http.EventPartListResponse;
+import com.zhaoyan.ladderball.domain.eventofmatch.http.*;
 import com.zhaoyan.ladderball.service.event.EventService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,6 +37,18 @@ public class EventController {
     EventPartListResponse getPartEvent(@RequestBody EventPartListRequest request) {
         logger.debug("getPartEvent() EventPartListRequest: " + request);
         EventPartListResponse response = eventService.getPartEvent(request);
+        return response;
+    }
+
+    /**
+     * 删除一个事件
+     */
+    @RequestMapping(value = "/event/delete", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+    public
+    @ResponseBody
+    EventDeleteResponse deleteEvent(@RequestBody EventDeleteRequest request) {
+        logger.debug("deleteEvent() EventDeleteRequest: " + request);
+        EventDeleteResponse response = eventService.deleteEvent(request);
         return response;
     }
 }
