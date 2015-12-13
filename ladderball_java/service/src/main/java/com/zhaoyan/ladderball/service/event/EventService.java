@@ -95,8 +95,13 @@ public class EventService {
         for (EventOfMatch eventOfMatch : eventOfMatches) {
             EventPartListResponse.Event event = new EventPartListResponse.Event();
             copierEventOfMatchToEventPartListResponse.copy(eventOfMatch, event, null);
-            event.playerId = eventOfMatch.playerOfMatch.id;
-            event.playerNumber = eventOfMatch.playerOfMatch.number;
+            if (eventOfMatch.playerOfMatch != null) {
+                event.playerId = eventOfMatch.playerOfMatch.id;
+                event.playerNumber = eventOfMatch.playerOfMatch.number;
+            } else {
+                event.playerId = -1;
+                event.playerNumber = -1;
+            }
             response.events.add(event);
         }
 
