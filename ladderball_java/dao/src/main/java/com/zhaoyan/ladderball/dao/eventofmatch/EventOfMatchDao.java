@@ -25,4 +25,9 @@ public interface EventOfMatchDao {
      * 获取比赛一小节的事件
      */
     List<EventOfMatch> getEventPartList(long matchId, long teamId, int partNumber);
+
+    /**
+     * 删除比赛一小节中的小节结束事件
+     */
+    void deleteXiaoJieJieShuEvent(long matchId, long teamId, int partNumber);
 }

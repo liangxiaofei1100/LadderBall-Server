@@ -3,6 +3,7 @@ package com.zhaoyan.ladderball.service.event;
 import com.zhaoyan.ladderball.dao.eventofmatch.EventOfMatchDao;
 import com.zhaoyan.ladderball.dao.match.MatchPartDao;
 import com.zhaoyan.ladderball.dao.player.PlayerOfMatchDao;
+import com.zhaoyan.ladderball.domain.eventofmatch.EventCode;
 import com.zhaoyan.ladderball.domain.eventofmatch.db.EventOfMatch;
 import com.zhaoyan.ladderball.domain.eventofmatch.http.*;
 import com.zhaoyan.ladderball.service.event.handler.EventHandlerManager;
@@ -54,11 +55,8 @@ public class EventService {
                 return response;
             } else {
                 // 保存事件到数据库
-                EventOfMatch eventOfMatch = new EventOfMatch();
-                copierEventCollectionRequestToEventOfMatch.copy(event, eventOfMatch, null);
-                eventOfMatch.playerOfMatch = playerOfMatchDao.getPlayerByPlayerOfMatchId(event.playerId);
+                boolean result = saveEvent(event);
 
-                boolean result = eventOfMatchDao.addEvent(eventOfMatch);
                 if (result) {
                     // 处理事件
                     boolean handleResult = handleEvent(event);
@@ -74,6 +72,20 @@ public class EventService {
 
         response.buildOk();
         return response;
+    }
+
+    /**
+     * 保存事件到数据库
+     */
+    private boolean saveEvent(EventCollectionRequest.Event event) {
+        EventOfMatch eventOfMatch = new EventOfMatch();
+        copierEventCollectionRequestToEventOfMatch.copy(event, eventOfMatch, null);
+        eventOfMatch.playerOfMatch = playerOfMatchDao.getPlayerByPlayerOfMatchId(event.playerId);
+        // 处理小节结束事件，此事件每小节只有一个。如果已经有了小节结束事件，再添加时，先删除原来的小节结束事件。
+        if (EventCode.EVENT_XIAO_JIE_JIE_SHU == event.eventCode) {
+            eventOfMatchDao.deleteXiaoJieJieShuEvent(event.matchId, event.teamId, event.partNumber);
+        }
+        return eventOfMatchDao.addEvent(eventOfMatch);
     }
 
     private boolean handleEvent(EventCollectionRequest.Event event) {

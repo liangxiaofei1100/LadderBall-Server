@@ -14,20 +14,11 @@ public class EventHandlerManager {
     public EventHandlerManager() {
         // | 进球		| 10001		|
         eventHandlerMap.put(EventCode.EVENT_JIN_QIU, new EventJinQiuHandler());
-        // | 助攻		| 10002		|
-        eventHandlerMap.put(EventCode.EVENT_ZHU_GONG, new EventZhuGongHandler());
-        // | 角球		| 10003		|
-        eventHandlerMap.put(EventCode.EVENT_JIAO_QIU, new EventJiaoQiuHandler());
-        // | 任意球		| 10004		|
-        eventHandlerMap.put(EventCode.EVENT_REN_YI_QIU, new EventRenYiQiuHandler());
-        // | 边界球		| 10005		|
-        eventHandlerMap.put(EventCode.EVENT_BIAN_JIE_QIU, new EventBianJieQiuHandler());
-        // | 越位		| 10006		|
-        eventHandlerMap.put(EventCode.EVENT_YUE_WEI, new EventYueWeiHandler());
-        // | 失误		| 10007		|
-        eventHandlerMap.put(EventCode.EVENT_SHI_WU, new EventShiWuHandler());
-        // | 过人成功	| 10008		|
-        eventHandlerMap.put(EventCode.EVENT_GUO_REN_CHENG_GONG, new EventGuoRenChengGongHandler());
+
+        UpdateCountEventHandler updateCountEventHandler = new UpdateCountEventHandler();
+        for (int eventCode : UpdateCountEventHandler.EVENTS) {
+            eventHandlerMap.put(eventCode, updateCountEventHandler);
+        }
 
         // | 乌龙球	| 10027		|
         eventHandlerMap.put(EventCode.EVENT_WU_LONG_QIU, new EventWuLongQiuHandler());

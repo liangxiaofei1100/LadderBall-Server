@@ -57,4 +57,19 @@ public class HibernateEventOfMatchDao implements EventOfMatchDao {
 
         return events;
     }
+
+    @Override
+    public void deleteXiaoJieJieShuEvent(long matchId, long teamId, int partNumber) {
+        DetachedCriteria criteria = DetachedCriteria.forClass(EventOfMatch.class);
+
+        criteria.add(Restrictions.eq("matchId", matchId));
+        criteria.add(Restrictions.eq("teamId", teamId));
+        criteria.add(Restrictions.eq("partNumber", partNumber));
+        criteria.addOrder(Order.desc("timeSecond"));
+        List<EventOfMatch> events = (List<EventOfMatch>) hibernateTemplate.findByCriteria(criteria);
+
+        for (EventOfMatch eventOfMatch : events) {
+            hibernateTemplate.delete(eventOfMatch);
+        }
+    }
 }

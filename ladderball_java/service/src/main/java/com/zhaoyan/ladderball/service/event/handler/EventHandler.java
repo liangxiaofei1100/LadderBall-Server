@@ -7,14 +7,10 @@ import com.zhaoyan.ladderball.dao.match.MatchPartDao;
 import com.zhaoyan.ladderball.dao.player.PlayerOfMatchDao;
 import com.zhaoyan.ladderball.dao.teamofmatch.TeamOfMatchDao;
 import com.zhaoyan.ladderball.domain.eventofmatch.http.EventCollectionRequest.Event;
-import com.zhaoyan.ladderball.domain.match.db.Match;
-import com.zhaoyan.ladderball.domain.player.db.PlayerOfMatch;
-import com.zhaoyan.ladderball.domain.teamofmatch.db.TeamOfMatch;
 import com.zhaoyan.ladderball.service.common.util.SpringContextUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
 
 public abstract class EventHandler {
     Logger logger = LoggerFactory.getLogger(EventHandler.class);
