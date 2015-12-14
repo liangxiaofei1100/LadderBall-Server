@@ -60,4 +60,16 @@ public class MatchController {
         return response;
     }
 
+    /**
+     * 提交任务
+     */
+    @RequestMapping(value = "/submit", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+    public
+    @ResponseBody
+    MatchSubmitResponse submitMatch(@RequestBody MatchSubmitRequest request) {
+        logger.debug("submitMatch() MatchSubmitRequest: " + request);
+        MatchSubmitResponse response = matchService.submitMatch(request);
+        return response;
+    }
+
 }

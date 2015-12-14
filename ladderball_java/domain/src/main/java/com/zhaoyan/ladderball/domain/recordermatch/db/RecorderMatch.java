@@ -1,5 +1,7 @@
 package com.zhaoyan.ladderball.domain.recordermatch.db;
 
+import com.zhaoyan.ladderball.domain.match.db.Match;
+
 import javax.persistence.*;
 
 @Entity(name = "recorder_match")
@@ -9,8 +11,9 @@ public class RecorderMatch {
     public long id;
     @Column(name = "recorder_id")
     public long recorderId;
-    @Column(name = "match_id")
-    public long matchId;
+    @ManyToOne
+    @JoinColumn(name = "match_id")
+    public Match match;
     @Column(name = "asigned_team")
     public int asignedTeam;
 
@@ -25,20 +28,20 @@ public class RecorderMatch {
         this.id = id;
     }
 
+    public Match getMatch() {
+        return match;
+    }
+
+    public void setMatch(Match match) {
+        this.match = match;
+    }
+
     public long getRecorderId() {
         return recorderId;
     }
 
     public void setRecorderId(long recorderId) {
         this.recorderId = recorderId;
-    }
-
-    public long getMatchId() {
-        return matchId;
-    }
-
-    public void setMatchId(long matchId) {
-        this.matchId = matchId;
     }
 
     public int getAsignedTeam() {
@@ -49,13 +52,4 @@ public class RecorderMatch {
         this.asignedTeam = asignedTeam;
     }
 
-    @Override
-    public String toString() {
-        return "RecorderMatch{" +
-                "id=" + id +
-                ", recorderId=" + recorderId +
-                ", matchId=" + matchId +
-                ", asignedTeam=" + asignedTeam +
-                '}';
-    }
 }

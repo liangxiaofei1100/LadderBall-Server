@@ -4,22 +4,29 @@ import com.zhaoyan.ladderball.dao.eventofmatch.EventOfMatchDao;
 import com.zhaoyan.ladderball.dao.player.PlayerOfMatchDao;
 import com.zhaoyan.ladderball.domain.eventofmatch.http.EventCollectionRequest;
 import com.zhaoyan.ladderball.domain.player.db.PlayerOfMatch;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public class EventJinQiuHandler extends EventHandler {
+/**
+ * | 乌龙球		| 10027		|			|
+ */
+public class EventWuLongQiuHandler extends EventHandler {
+    Logger logger = LoggerFactory.getLogger(EventWuLongQiuHandler.class);
 
     @Override
     public boolean handleEvent(EventCollectionRequest.Event event) {
-        // 获取进球总个数
+        // 事件总数
         EventOfMatchDao eventOfMatchDao = getEventOfMatchDao();
-        int jinQiuCount = eventOfMatchDao.getEventCountByPlayer(event.eventCode, event.playerId);
-        // 更新个人进球个数
+        int eventCount = eventOfMatchDao.getEventCountByPlayer(event.eventCode, event.playerId);
+        // 更新个人事件个数
         PlayerOfMatchDao playerOfMatchDao = getPlayerOfMatchDao();
         PlayerOfMatch playerOfMatch = playerOfMatchDao.getPlayerByPlayerOfMatchId(event.playerId);
-        playerOfMatch.event10001 = jinQiuCount;
+        playerOfMatch.event10027 = eventCount;
         playerOfMatchDao.modifyPlayer(playerOfMatch);
-        // 更新本球队得分
+        // 更新对面球队得分
         long oppositeTeamId = TeamScoreUtil.getOppositeTeamId(getMatchDao(), event.matchId, event.teamId);
-        TeamScoreUtil.updateTeamScore(getTeamOfMatchDao(), playerOfMatchDao, event.teamId, oppositeTeamId);
+        logger.debug("handleEvent() oppositeTeamId = " + oppositeTeamId);
+        TeamScoreUtil.updateTeamScore(getTeamOfMatchDao(), playerOfMatchDao, oppositeTeamId, event.teamId);
         return true;
     }
 }

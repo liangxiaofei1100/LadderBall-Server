@@ -8,7 +8,18 @@ import java.util.List;
 
 public interface RecorderMatchDao {
 
+    /**
+     * 获取记录员的所有比赛列表
+     */
     List<RecorderMatch> getRecorderMatchByRecorder(long recorderId);
 
+    /**
+     * 根据比赛是否完成，获取记录员的比赛列表
+     */
+    List<RecorderMatch> getRecorderMatchByRecorder(long recorderId, boolean isComplete);
+
+    /**
+     * 根据记录员和比赛获取一条比赛分配信息。
+     */
     RecorderMatch getRecorderMatchByRecorderMatch(long recorderId, long matchId);
 }

@@ -111,7 +111,7 @@ public class EventCollectionRequest extends Request{
         public String toString() {
             return "Event{" +
                     "eventCode=" + eventCode +
-                    ", teamId=" + matchId +
+                    ", matchId=" + matchId +
                     ", teamId=" + teamId +
                     ", playerId=" + playerId +
                     ", partNumber=" + partNumber +
@@ -120,5 +120,12 @@ public class EventCollectionRequest extends Request{
                     ", uuid='" + uuid + '\'' +
                     '}';
         }
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + "EventCollectionRequest{" +
+                "events=" + events +
+                '}';
     }
 }

@@ -17,12 +17,17 @@ public interface MatchDao {
     List<Match> getAllMatch();
 
     /**
-     * 查询一场比赛
+     * 查询比赛
      */
     Match getMatch(long id);
 
     /**
-     * 修改一场比赛
+     * 修改比赛
      */
     boolean modifyMatch(long id, int playerNumber, int totalPart, int partMinutes);
+
+    /**
+     * 修改比赛
+     */
+    boolean modifyMatch(Match match);
 }

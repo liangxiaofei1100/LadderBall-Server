@@ -29,6 +29,9 @@ public class EventHandlerManager {
         // | 过人成功	| 10008		|
         eventHandlerMap.put(EventCode.EVENT_GUO_REN_CHENG_GONG, new EventGuoRenChengGongHandler());
 
+        // | 乌龙球	| 10027		|
+        eventHandlerMap.put(EventCode.EVENT_WU_LONG_QIU, new EventWuLongQiuHandler());
+
         // | 小节结束	| 20001		|			|
         eventHandlerMap.put(EventCode.EVENT_XIAO_JIE_JIE_SHU, new EventXiaoJieJieShuHandler());
     }

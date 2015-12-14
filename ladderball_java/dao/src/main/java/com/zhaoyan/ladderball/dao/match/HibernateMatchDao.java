@@ -46,4 +46,9 @@ public class HibernateMatchDao implements MatchDao {
         return true;
     }
 
+    @Override
+    public boolean modifyMatch(Match match) {
+        hibernateTemplate.update(match);
+        return true;
+    }
 }

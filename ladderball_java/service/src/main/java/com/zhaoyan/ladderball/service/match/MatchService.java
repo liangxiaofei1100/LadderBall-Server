@@ -72,13 +72,24 @@ public class MatchService extends BaseService {
         response.matches = new ArrayList<>();
 
         long recorderId = Long.valueOf(request.header.userToken);
-        List<RecorderMatch> recorderMatches = recorderMatchDao.getRecorderMatchByRecorder(recorderId);
 
+        List<RecorderMatch> recorderMatches = null;
+        switch (request.completeType) {
+            case MatchListRequest.TYPE_ALL:
+                recorderMatches = recorderMatchDao.getRecorderMatchByRecorder(recorderId);
+                break;
+            case MatchListRequest.TYPE_COMPLETE:
+                recorderMatches = recorderMatchDao.getRecorderMatchByRecorder(recorderId, true);
+                break;
+            case MatchListRequest.TYPE_NOT_COMPLETE:
+                recorderMatches = recorderMatchDao.getRecorderMatchByRecorder(recorderId, false);
+                break;
+        }
 
         if (recorderMatches != null) {
             for (RecorderMatch recorderMatch : recorderMatches) {
                 logger.debug("getMatchList() RecorderMatch: " + recorderMatch);
-                Match match = matchDao.getMatch(recorderMatch.matchId);
+                Match match = recorderMatch.match;
                 if (match != null) {
                     MatchListResponse.Match m = new MatchListResponse.Match();
                     copierMatchToMatchListResponse.copy(match, m, null);
@@ -265,6 +276,27 @@ public class MatchService extends BaseService {
             }
         }
 
+        return response;
+    }
+
+    /**
+     * 提交比赛
+     */
+    public MatchSubmitResponse submitMatch(MatchSubmitRequest request) {
+        MatchSubmitResponse response = new MatchSubmitResponse();
+
+        Match match = matchDao.getMatch(request.matchId);
+        if (match == null) {
+            response.buildFail("无法找到该场比赛");
+        } else {
+            match.complete = true;
+            boolean result = matchDao.modifyMatch(match);
+            if (result) {
+                response.buildOk();
+            } else {
+                response.buildFail();
+            }
+        }
         return response;
     }
 }

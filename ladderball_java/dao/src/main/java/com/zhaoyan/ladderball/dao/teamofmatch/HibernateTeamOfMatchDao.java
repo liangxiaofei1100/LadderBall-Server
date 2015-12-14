@@ -14,4 +14,10 @@ public class HibernateTeamOfMatchDao implements TeamOfMatchDao {
     public TeamOfMatch getTeamOfMatch(long teamOfMatchId) {
         return hibernateTemplate.get(TeamOfMatch.class, teamOfMatchId);
     }
+
+    @Override
+    public boolean updateTeamOfMatch(TeamOfMatch teamOfMatch) {
+        hibernateTemplate.update(teamOfMatch);
+        return true;
+    }
 }

@@ -17,7 +17,10 @@ public class PlayerOfMatch {
     public boolean isFirst;
     @Column(name = "event10001")
     public int event10001;
-
+    @Column(name = "event10002")
+    public int event10002;
+    @Column(name = "event10027")
+    public int event10027;
 
     public long getId() {
         return id;
