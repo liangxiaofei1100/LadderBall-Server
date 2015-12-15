@@ -1,10 +1,12 @@
 package com.zhaoyan.ladderball.service.match;
 
 import com.zhaoyan.ladderball.dao.match.TmpMatchDao;
+import com.zhaoyan.ladderball.dao.match.TmpMatchPartDao;
 import com.zhaoyan.ladderball.dao.player.TmpPlayerOfMatchDao;
 import com.zhaoyan.ladderball.dao.recordermatch.RecorderTmpMatchDao;
 import com.zhaoyan.ladderball.dao.teamofmatch.TmpTeamOfMatchDao;
 import com.zhaoyan.ladderball.domain.match.db.TmpMatch;
+import com.zhaoyan.ladderball.domain.match.db.TmpMatchPart;
 import com.zhaoyan.ladderball.domain.match.http.*;
 import com.zhaoyan.ladderball.domain.player.db.TmpPlayerOfMatch;
 import com.zhaoyan.ladderball.domain.recordermatch.db.RecorderMatch;
@@ -32,6 +34,10 @@ public class TmpMatchService extends BaseService {
     @Autowired
     @Qualifier("hibernateTmpMatchDao")
     TmpMatchDao tmpMatchDao;
+
+    @Autowired
+    @Qualifier("hibernateTmpMatchPartDao")
+    TmpMatchPartDao tmpMatchPartDao;
 
     @Autowired
     @Qualifier("hibernateTmpTeamOfMatchDao")
@@ -106,7 +112,6 @@ public class TmpMatchService extends BaseService {
 
         TmpMatch match = tmpMatchDao.getMatch(request.matchId);
         if (match != null) {
-            response.buildOk();
             // 比赛数据
             response.id = match.id;
             response.partMinutes = match.partMinutes;
@@ -147,17 +152,34 @@ public class TmpMatchService extends BaseService {
                 }
             }
 
-            // 小节数据
-            // TODO 暂时没有小节数据，先模拟
+            // 处理小节数据
             response.partDatas = new ArrayList<>();
-            // 小节号从1开始
-            for (int i = 1; i <= response.totalPart; i++) {
+            List<TmpMatchPart> matchParts = tmpMatchPartDao.getMatchParts(request.matchId);
+
+            // 修复小节数据错误，因为老数据中没有建立小节表，却有小节数，补上小节数据
+            // 修复部分开始
+            if (match.totalPart > matchParts.size()) {
+                // 节数增加了
+                for (int i = matchParts.size() + 1; i <= match.totalPart; i++) {
+                    TmpMatchPart matchPart = new TmpMatchPart();
+                    matchPart.matchId = request.matchId;
+                    matchPart.partNumber = i;
+                    matchPart.isComplete = false;
+                    tmpMatchPartDao.addMatchPart(matchPart);
+                }
+            }
+            // 修复部分结束
+
+            // 小节数据
+            for (TmpMatchPart part : matchParts) {
                 MatchDetailResponse.PartData partData = new MatchDetailResponse.PartData();
-                partData.partNumber = i;
-                partData.isComplete = false;
+                partData.partNumber = part.partNumber;
+                partData.isComplete = part.isComplete;
 
                 response.partDatas.add(partData);
             }
+
+            response.buildOk();
         } else {
             response.buildFail("没有找到比赛");
         }
@@ -188,19 +210,48 @@ public class TmpMatchService extends BaseService {
     public TmpMatchModifyResponse modifyTmpMatch(TmpMatchModifyRequest request) {
         TmpMatchModifyResponse response = new TmpMatchModifyResponse();
         response.buildOk();
-        boolean result = tmpMatchDao.modifyMatch(request.matchId, request.playerNumber, request.totalPart, request.partMinutes);
-        if (!result) {
+
+        // 修改比赛表
+        TmpMatch match = tmpMatchDao.getMatch(request.matchId);
+        if (match == null) {
             logger.warn("modifyTmpMatch() modify match fail. matchId: " + request.matchId);
             response.buildFail();
             return response;
+        } else {
+            match.playerNumber = request.playerNumber;
+            match.totalPart = request.totalPart;
+            match.partMinutes = request.partMinutes;
+            tmpMatchDao.modifyMatch(match);
         }
 
+        // 修改比赛小节数据
+        List<TmpMatchPart> matchParts = tmpMatchPartDao.getMatchParts(request.matchId);
+        if (request.totalPart > matchParts.size()) {
+            // 节数增加了
+            for (int i = matchParts.size() + 1; i <= request.totalPart; i++) {
+                TmpMatchPart matchPart = new TmpMatchPart();
+                matchPart.matchId = request.matchId;
+                matchPart.partNumber = i;
+                matchPart.isComplete = false;
+                tmpMatchPartDao.addMatchPart(matchPart);
+            }
+        } else if (request.totalPart < matchParts.size()) {
+            // 节数减少了
+            for (TmpMatchPart matchPart : matchParts) {
+                if (matchPart.partNumber > request.totalPart) {
+                    tmpMatchPartDao.deleteMatchPart(matchPart);
+                }
+            }
+        }
+
+        // 修改球员数据
         for (TmpMatchModifyRequest.Player player : request.players) {
-            TmpPlayerOfMatch newPlayer = new TmpPlayerOfMatch();
-            copierTmpMatchModifyRequestToTmpPlayerOfMatch.copy(player, newPlayer, null);
-            boolean playerResult = tmpPlayerOfMatchDao.modifyPlayer(newPlayer);
-            if (!playerResult) {
-                logger.warn("modifyTmpMatch() modify player fail. playerId: " + player.id);
+            TmpPlayerOfMatch newPlayer = tmpPlayerOfMatchDao.getPlayerById(player.id);
+            if (newPlayer != null) {
+                copierTmpMatchModifyRequestToTmpPlayerOfMatch.copy(player, newPlayer, null);
+                tmpPlayerOfMatchDao.modifyPlayer(newPlayer);
+            } else {
+                logger.warn("modifyTmpMatch() error, player id not found. playerId: " + player.id);
             }
         }
         return response;
@@ -283,7 +334,7 @@ public class TmpMatchService extends BaseService {
     }
 
     /**
-     *记录者领取练习赛，只能领取客场队伍
+     * 记录者领取练习赛，只能领取客场队伍
      */
     public TmpMatchAsignVisitorResponse asignTmpMatchVisitor(TmpMatchAsignVisitorRequest request) {
         TmpMatchAsignVisitorResponse response = new TmpMatchAsignVisitorResponse();

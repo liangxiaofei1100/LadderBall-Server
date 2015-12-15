@@ -236,12 +236,14 @@ public class MatchService extends BaseService {
             }
         }
 
+        // 修改球员数据
         for (MatchModifyRequest.Player player : request.players) {
             PlayerOfMatch newPlayer = playerOfMatchDao.getPlayerByPlayerOfMatchId(player.id);
-            copierMatchModifyReqestToPlayer.copy(player, newPlayer, null);
-            boolean playerResult = playerOfMatchDao.modifyPlayer(newPlayer);
-            if (!playerResult) {
-                logger.warn("modifyMatch() modify player fail. playerId: " + player.id);
+            if (newPlayer != null) {
+                copierMatchModifyReqestToPlayer.copy(player, newPlayer, null);
+                playerOfMatchDao.modifyPlayer(newPlayer);
+            } else {
+                logger.warn("modifyMatch() error, player id not found. playerId: " + player.id);
             }
         }
         return response;

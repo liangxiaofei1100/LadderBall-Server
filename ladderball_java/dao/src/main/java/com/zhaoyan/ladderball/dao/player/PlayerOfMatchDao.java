@@ -20,7 +20,7 @@ public interface PlayerOfMatchDao {
     /**
      * 修改球员
      */
-    boolean modifyPlayer(PlayerOfMatch newPlayer);
+    void modifyPlayer(PlayerOfMatch newPlayer);
 
     /**
      * 添加球员

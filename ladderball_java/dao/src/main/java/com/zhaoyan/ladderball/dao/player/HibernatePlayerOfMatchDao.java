@@ -29,9 +29,8 @@ public class HibernatePlayerOfMatchDao implements PlayerOfMatchDao {
     }
 
     @Override
-    public boolean modifyPlayer(PlayerOfMatch newPlayer) {
+    public void modifyPlayer(PlayerOfMatch newPlayer) {
         hibernateTemplate.update(newPlayer);
-        return true;
     }
 
     @Override

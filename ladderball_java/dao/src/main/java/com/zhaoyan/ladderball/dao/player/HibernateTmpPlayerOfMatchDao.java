@@ -24,15 +24,29 @@ public class HibernateTmpPlayerOfMatchDao implements TmpPlayerOfMatchDao{
     }
 
     @Override
-    public boolean modifyPlayer(TmpPlayerOfMatch newPlayer) {
-        TmpPlayerOfMatch player = hibernateTemplate.get(TmpPlayerOfMatch.class, newPlayer.id);
-        if (player == null) {
-            return false;
-        }
-        player.name = newPlayer.name;
-        player.isFirst = newPlayer.isFirst;
-        player.number = newPlayer.number;
+    public TmpPlayerOfMatch getPlayerById(long playerOfMatchId) {
+        return hibernateTemplate.get(TmpPlayerOfMatch.class, playerOfMatchId);
+    }
+
+    @Override
+    public void modifyPlayer(TmpPlayerOfMatch player) {
+        hibernateTemplate.update(player);
+    }
+
+    @Override
+    public void addPlayer(TmpPlayerOfMatch player) {
         hibernateTemplate.save(player);
-        return true;
+        hibernateTemplate.flush();
+        hibernateTemplate.clear();
+    }
+
+    @Override
+    public boolean isPlayerNumberRepeated(TmpPlayerOfMatch player) {
+        // 查询同一个球队相同号码的球员
+        DetachedCriteria criteria = DetachedCriteria.forClass(TmpPlayerOfMatch.class);
+        criteria.add(Restrictions.eq("teamId", player.teamId));
+        criteria.add(Restrictions.eq("number", player.number));
+        List<TmpPlayerOfMatch> playerOfMatches = (List<TmpPlayerOfMatch>) hibernateTemplate.findByCriteria(criteria);
+        return !playerOfMatches.isEmpty();
     }
 }
