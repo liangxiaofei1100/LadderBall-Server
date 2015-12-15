@@ -8,6 +8,7 @@ import com.zhaoyan.ladderball.dao.teamofmatch.TmpTeamOfMatchDao;
 import com.zhaoyan.ladderball.domain.match.db.TmpMatch;
 import com.zhaoyan.ladderball.domain.match.db.TmpMatchPart;
 import com.zhaoyan.ladderball.domain.match.http.*;
+import com.zhaoyan.ladderball.domain.player.db.PlayerOfMatch;
 import com.zhaoyan.ladderball.domain.player.db.TmpPlayerOfMatch;
 import com.zhaoyan.ladderball.domain.recordermatch.db.RecorderMatch;
 import com.zhaoyan.ladderball.domain.recordermatch.db.RecorderTmpMatch;
@@ -57,6 +58,12 @@ public class TmpMatchService extends BaseService {
             BeanCopier.create(TmpPlayerOfMatch.class, MatchDetailResponse.Player.class, false);
     private static BeanCopier copierTmpMatchModifyRequestToTmpPlayerOfMatch =
             BeanCopier.create(TmpMatchModifyRequest.Player.class, TmpPlayerOfMatch.class, false);
+
+    // 添加球员
+    private static BeanCopier copierMatchAddPlayerRequestToTmpPlayerOfMatch =
+            BeanCopier.create(MatchAddPlayerRequest.Player.class, TmpPlayerOfMatch.class, false);
+    private static BeanCopier copierTmpPlayerOfMatchToMatchAddPlayerResponse =
+            BeanCopier.create(TmpPlayerOfMatch.class, MatchAddPlayerResponse.Player.class, false);
 
     /**
      * 获取练习赛列表
@@ -352,6 +359,33 @@ public class TmpMatchService extends BaseService {
             }
         }
 
+        return response;
+    }
+
+    /**
+     * 添加球员
+     */
+    public MatchAddPlayerResponse addPlayer(MatchAddPlayerRequest request) {
+        MatchAddPlayerResponse response = new MatchAddPlayerResponse();
+
+        TmpPlayerOfMatch playerOfMatch = new TmpPlayerOfMatch();
+        copierMatchAddPlayerRequestToTmpPlayerOfMatch.copy(request.player, playerOfMatch, null);
+        playerOfMatch.teamId = request.teamId;
+
+        // 不能添加重复号码的球员
+        boolean isRepeatedNumber = tmpPlayerOfMatchDao.isPlayerNumberRepeated(playerOfMatch);
+        if (isRepeatedNumber) {
+            response.buildFail("不能添加重复号码的球员");
+        } else {
+            tmpPlayerOfMatchDao.addPlayer(playerOfMatch);
+
+            // 将结果添加到response
+            MatchAddPlayerResponse.Player resultPlayer = new MatchAddPlayerResponse.Player();
+            copierTmpPlayerOfMatchToMatchAddPlayerResponse.copy(playerOfMatch, resultPlayer, null);
+
+            response.player = resultPlayer;
+            response.buildOk();
+        }
         return response;
     }
 }

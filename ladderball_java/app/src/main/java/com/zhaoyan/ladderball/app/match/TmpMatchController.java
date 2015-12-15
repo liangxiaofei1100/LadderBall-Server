@@ -81,4 +81,16 @@ public class TmpMatchController {
         AddTmpMatchResponse response = tmpMatchService.addMatch(request);
         return response;
     }
+
+    /**
+     * 添加球员
+     */
+    @RequestMapping(value = "/player/add", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+    public
+    @ResponseBody
+    MatchAddPlayerResponse addPlayer(@RequestBody MatchAddPlayerRequest request) {
+        logger.debug("addPlayer() MatchAddPlayerRequest: " + request);
+        MatchAddPlayerResponse response = tmpMatchService.addPlayer(request);
+        return response;
+    }
 }
