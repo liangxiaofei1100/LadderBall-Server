@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @RequestMapping("/account")
 public class RecorderController {
-    Logger logger = LoggerFactory.getLogger(HelloController.class);
+    Logger logger = LoggerFactory.getLogger(RecorderController.class);
 
     @Autowired
     RecorderService recorderService;
