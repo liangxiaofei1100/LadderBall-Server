@@ -153,6 +153,33 @@ public class PlayerOfMatch {
                 ", teamId=" + teamId +
                 ", isFirst=" + isFirst +
                 ", event10001=" + event10001 +
+                ", event10002=" + event10002 +
+                ", event10003=" + event10003 +
+                ", event10004=" + event10004 +
+                ", event10005=" + event10005 +
+                ", event10006=" + event10006 +
+                ", event10007=" + event10007 +
+                ", event10008=" + event10008 +
+                ", event10009=" + event10009 +
+                ", event10010=" + event10010 +
+                ", event10011=" + event10011 +
+                ", event10012=" + event10012 +
+                ", event10013=" + event10013 +
+                ", event10014=" + event10014 +
+                ", event10015=" + event10015 +
+                ", event10016=" + event10016 +
+                ", event10017=" + event10017 +
+                ", event10018=" + event10018 +
+                ", event10019=" + event10019 +
+                ", event10020=" + event10020 +
+                ", event10021=" + event10021 +
+                ", event10022=" + event10022 +
+                ", event10023=" + event10023 +
+                ", event10024=" + event10024 +
+                ", event10025=" + event10025 +
+                ", event10026=" + event10026 +
+                ", event10027=" + event10027 +
+                ", event10028=" + event10028 +
                 '}';
     }
 }

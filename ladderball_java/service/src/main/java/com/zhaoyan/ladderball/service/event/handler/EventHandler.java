@@ -6,7 +6,7 @@ import com.zhaoyan.ladderball.dao.match.MatchDao;
 import com.zhaoyan.ladderball.dao.match.MatchPartDao;
 import com.zhaoyan.ladderball.dao.player.PlayerOfMatchDao;
 import com.zhaoyan.ladderball.dao.teamofmatch.TeamOfMatchDao;
-import com.zhaoyan.ladderball.domain.eventofmatch.http.EventCollectionRequest.Event;
+import com.zhaoyan.ladderball.domain.eventofmatch.db.EventOfMatch;
 import com.zhaoyan.ladderball.service.common.util.SpringContextUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,11 +14,6 @@ import org.slf4j.LoggerFactory;
 
 public abstract class EventHandler {
     Logger logger = LoggerFactory.getLogger(EventHandler.class);
-
-    /**
-     * 处理事件
-     */
-    abstract public boolean handleEvent(Event event);
 
     public MatchDao getMatchDao() {
         return SpringContextUtil.getBean("hibernateMatchDao");
@@ -39,4 +34,14 @@ public abstract class EventHandler {
     public EventOfMatchDao getEventOfMatchDao() {
         return SpringContextUtil.getBean("hibernateEventOfMatchDao");
     }
+
+    /**
+     * 处理添加事件
+     */
+    public abstract boolean handleAddEvent(EventOfMatch event);
+
+    /**
+     * 处理删除事件
+     */
+    public abstract boolean handleDeleteEvent(EventOfMatch event);
 }

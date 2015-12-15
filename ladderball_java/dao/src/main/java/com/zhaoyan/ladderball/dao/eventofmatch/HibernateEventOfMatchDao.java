@@ -37,6 +37,11 @@ public class HibernateEventOfMatchDao implements EventOfMatchDao {
     }
 
     @Override
+    public void updateEvent(EventOfMatch eventOfMatch) {
+        hibernateTemplate.update(eventOfMatch);
+    }
+
+    @Override
     public int getEventCountByPlayer(int eventCode, long playerId) {
         DetachedCriteria criteria = DetachedCriteria.forClass(EventOfMatch.class);
         criteria.add(Restrictions.eq("eventCode", eventCode));
@@ -71,5 +76,15 @@ public class HibernateEventOfMatchDao implements EventOfMatchDao {
         for (EventOfMatch eventOfMatch : events) {
             hibernateTemplate.delete(eventOfMatch);
         }
+    }
+
+    @Override
+    public EventOfMatch getEventBy(long eventId) {
+        return hibernateTemplate.get(EventOfMatch.class, eventId);
+    }
+
+    @Override
+    public void deleteEvent(EventOfMatch eventOfMatch) {
+        hibernateTemplate.delete(eventOfMatch);
     }
 }

@@ -51,4 +51,16 @@ public class EventController {
         EventDeleteResponse response = eventService.deleteEvent(request);
         return response;
     }
+
+    /**
+     * 修改一个事件
+     */
+    @RequestMapping(value = "/event/modify", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+    public
+    @ResponseBody
+    EventModifyResponse modifyEvent(@RequestBody EventModifyRequest request) {
+        logger.debug("modifyEvent() EventModifyRequest: " + request);
+        EventModifyResponse response = eventService.modifyEvent(request);
+        return response;
+    }
 }

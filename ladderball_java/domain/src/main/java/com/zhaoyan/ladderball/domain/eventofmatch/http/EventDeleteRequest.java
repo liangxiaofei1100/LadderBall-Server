@@ -6,12 +6,12 @@ public class EventDeleteRequest extends Request {
     /**
      * 事件id
      */
-    public long id;
+    public long eventId;
 
     @Override
     public String toString() {
         return super.toString() + "EventDeleteRequest{" +
-                "id=" + id +
+                "eventId=" + eventId +
                 '}';
     }
 }

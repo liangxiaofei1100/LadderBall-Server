@@ -42,6 +42,9 @@ public class EventService {
     private static BeanCopier copierEventOfMatchToEventPartListResponse =
             BeanCopier.create(EventOfMatch.class, EventPartListResponse.Event.class, false);
 
+    private static BeanCopier copierEventModifyRequestToEventOfMatch =
+            BeanCopier.create(EventModifyRequest.class, EventOfMatch.class, false);
+
     /**
      * 添加一个事件
      */
@@ -55,17 +58,11 @@ public class EventService {
                 return response;
             } else {
                 // 保存事件到数据库
-                boolean result = saveEvent(event);
-
-                if (result) {
-                    // 处理事件
-                    boolean handleResult = handleEvent(event);
-                    if (!handleResult) {
-                        logger.warn("Handle event fail. " + event);
-                    }
-                } else {
-                    response.buildFail("添加事件错误，事件: " + event);
-                    return response;
+                EventOfMatch eventOfMatch = saveEvent(event);
+                // 处理事件
+                boolean handleResult = handleAddEvent(eventOfMatch);
+                if (!handleResult) {
+                    logger.warn("Handle add event fail. " + event);
                 }
             }
         }
@@ -77,7 +74,7 @@ public class EventService {
     /**
      * 保存事件到数据库
      */
-    private boolean saveEvent(EventCollectionRequest.Event event) {
+    private EventOfMatch saveEvent(EventCollectionRequest.Event event) {
         EventOfMatch eventOfMatch = new EventOfMatch();
         copierEventCollectionRequestToEventOfMatch.copy(event, eventOfMatch, null);
         eventOfMatch.playerOfMatch = playerOfMatchDao.getPlayerByPlayerOfMatchId(event.playerId);
@@ -85,11 +82,76 @@ public class EventService {
         if (EventCode.EVENT_XIAO_JIE_JIE_SHU == event.eventCode) {
             eventOfMatchDao.deleteXiaoJieJieShuEvent(event.matchId, event.teamId, event.partNumber);
         }
-        return eventOfMatchDao.addEvent(eventOfMatch);
+        eventOfMatchDao.addEvent(eventOfMatch);
+        return eventOfMatch;
     }
 
-    private boolean handleEvent(EventCollectionRequest.Event event) {
-        return eventHandlerManager.handleEvent(event);
+    private boolean handleAddEvent(EventOfMatch eventOfMatch) {
+        return eventHandlerManager.handleAddEvent(eventOfMatch);
+    }
+
+    /**
+     * 删除事件
+     */
+    public EventDeleteResponse deleteEvent(EventDeleteRequest request) {
+        EventDeleteResponse response = new EventDeleteResponse();
+        EventOfMatch eventOfMatch = eventOfMatchDao.getEventBy(request.eventId);
+
+        if (eventOfMatch != null) {
+            eventOfMatchDao.deleteEvent(eventOfMatch);
+            boolean handleResult = handleDeleteEvent(eventOfMatch);
+            if (!handleResult) {
+                logger.warn("Handle delete event fail. " + eventOfMatch);
+            }
+            response.buildOk();
+        } else {
+            response.buildFail("事件不存在，id = " + request.eventId);
+        }
+
+        return response;
+    }
+
+    private boolean handleDeleteEvent(EventOfMatch eventOfMatch) {
+        return eventHandlerManager.handleDeleteEvent(eventOfMatch);
+    }
+
+    /**
+     * 修改事件
+     */
+    public EventModifyResponse modifyEvent(EventModifyRequest request) {
+        EventModifyResponse response = new EventModifyResponse();
+
+        EventOfMatch originalEventOfMatch = eventOfMatchDao.getEventBy(request.id);
+
+        if (originalEventOfMatch != null) {
+            // 更新事件并更新事件的统计数据
+            EventOfMatch newEventOfMatch = originalEventOfMatch;
+            // clone对象，因为update之后，原来的对象也被改变了。
+            originalEventOfMatch = (EventOfMatch) originalEventOfMatch.clone();
+            copierEventModifyRequestToEventOfMatch.copy(request, newEventOfMatch, null);
+            newEventOfMatch.playerOfMatch = playerOfMatchDao.getPlayerByPlayerOfMatchId(request.playerId);
+            eventOfMatchDao.updateEvent(newEventOfMatch);
+
+            // 处理事件
+            boolean handleResult = handleModifyEvent(originalEventOfMatch, newEventOfMatch);
+            if (!handleResult) {
+                logger.warn("Handle modify event fail. " + newEventOfMatch);
+            }
+
+            response.buildOk();
+        } else {
+            response.buildFail("事件不存在，id = " + request.id);
+            return response;
+        }
+
+        response.buildOk();
+        return response;
+    }
+
+    private boolean handleModifyEvent(EventOfMatch originalEventOfMatch, EventOfMatch newEventOfMatch) {
+        logger.debug("originalEventOfMatch: " + originalEventOfMatch);
+        logger.debug("newEventOfMatch: " + newEventOfMatch);
+        return eventHandlerManager.handleModifyEvent(originalEventOfMatch, newEventOfMatch);
     }
 
     /**
@@ -118,13 +180,4 @@ public class EventService {
         return response;
     }
 
-    /**
-     * 删除事件
-     */
-    public EventDeleteResponse deleteEvent(EventDeleteRequest request) {
-        EventDeleteResponse response = new EventDeleteResponse();
-        response.buildFail("暂未实现");
-
-        return response;
-    }
 }

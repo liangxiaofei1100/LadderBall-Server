@@ -1,7 +1,7 @@
 package com.zhaoyan.ladderball.service.event.handler;
 
 import com.zhaoyan.ladderball.domain.eventofmatch.EventCode;
-import com.zhaoyan.ladderball.domain.eventofmatch.http.EventCollectionRequest;
+import com.zhaoyan.ladderball.domain.eventofmatch.db.EventOfMatch;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -28,12 +28,37 @@ public class EventHandlerManager {
     }
 
     /**
-     * 处理事件
+     * 处理添加事件
+     *
      * @param event 事件
      * @return 如果事件被成功处理，返回true，否则返回false。
      */
-    public boolean handleEvent(EventCollectionRequest.Event event){
+    public boolean handleAddEvent(EventOfMatch event) {
         EventHandler eventHandler = eventHandlerMap.get(event.eventCode);
-        return eventHandler != null && eventHandler.handleEvent(event);
+        return eventHandler != null && eventHandler.handleAddEvent(event);
+    }
+
+    /**
+     * 处理删除事件
+     *
+     * @param event 事件
+     * @return 如果事件被成功处理，返回true，否则返回false。
+     */
+    public boolean handleDeleteEvent(EventOfMatch event) {
+        EventHandler eventHandler = eventHandlerMap.get(event.eventCode);
+        return eventHandler != null && eventHandler.handleDeleteEvent(event);
+    }
+
+    /**
+     * 处理修改事件
+     */
+    public boolean handleModifyEvent(EventOfMatch originalEventOfMatch, EventOfMatch newEventOfMatch) {
+        EventHandler originalEventHandler = eventHandlerMap.get(originalEventOfMatch.eventCode);
+        boolean originalHandleResult = originalEventHandler != null && originalEventHandler.handleDeleteEvent(originalEventOfMatch);
+
+        EventHandler newEventHandler = eventHandlerMap.get(newEventOfMatch.eventCode);
+        boolean newHandlerResult = newEventHandler != null && newEventHandler.handleDeleteEvent(newEventOfMatch);
+
+        return originalHandleResult && newHandlerResult;
     }
 }

@@ -3,7 +3,7 @@ package com.zhaoyan.ladderball.service.event.handler;
 import com.zhaoyan.ladderball.dao.eventofmatch.EventOfMatchDao;
 import com.zhaoyan.ladderball.dao.player.PlayerOfMatchDao;
 import com.zhaoyan.ladderball.domain.eventofmatch.EventCode;
-import com.zhaoyan.ladderball.domain.eventofmatch.http.EventCollectionRequest;
+import com.zhaoyan.ladderball.domain.eventofmatch.db.EventOfMatch;
 import com.zhaoyan.ladderball.domain.player.db.PlayerOfMatch;
 
 public class UpdateCountEventHandler extends EventHandler {
@@ -64,23 +64,42 @@ public class UpdateCountEventHandler extends EventHandler {
     };
 
     @Override
-    public boolean handleEvent(EventCollectionRequest.Event event) {
+    public boolean handleAddEvent(EventOfMatch event) {
+        // 更新球员数据
+        return updatePlayerOfMatch(event.eventCode, event.playerOfMatch.id);
+    }
+
+    @Override
+    public boolean handleDeleteEvent(EventOfMatch event) {
+        if (event.playerOfMatch != null) {
+            // 更新球员数据
+            return updatePlayerOfMatch(event.eventCode, event.playerOfMatch.id);
+        } else {
+            // 事件没有关联到球员，不需要更新球员数据
+            return true;
+        }
+    }
+
+    private boolean updatePlayerOfMatch(int eventCode, long playerId) {
         // 获取事件总个数
         EventOfMatchDao eventOfMatchDao = getEventOfMatchDao();
-        int eventCount = eventOfMatchDao.getEventCountByPlayer(event.eventCode, event.playerId);
+        int eventCount = eventOfMatchDao.getEventCountByPlayer(eventCode, playerId);
         // 更新个人事件个数
         PlayerOfMatchDao playerOfMatchDao = getPlayerOfMatchDao();
-        PlayerOfMatch playerOfMatch = playerOfMatchDao.getPlayerByPlayerOfMatchId(event.playerId);
+        PlayerOfMatch playerOfMatch = playerOfMatchDao.getPlayerByPlayerOfMatchId(playerId);
 
         // 更新事件个数
-        updateEventCount(playerOfMatch, eventCount, event);
+        updatePlayerOfMatchEvent(playerOfMatch, eventCount, eventCode);
 
         playerOfMatchDao.modifyPlayer(playerOfMatch);
         return true;
     }
 
-    public void updateEventCount(PlayerOfMatch playerOfMatch, int eventCount, EventCollectionRequest.Event event) {
-        switch (event.eventCode) {
+    /**
+     *
+     */
+    private void updatePlayerOfMatchEvent(PlayerOfMatch playerOfMatch, int eventCount, int eventCode) {
+        switch (eventCode) {
             case EventCode.EVENT_ZHU_GONG:
                 // | 助攻		| 10002		|
                 playerOfMatch.event10002 = eventCount;

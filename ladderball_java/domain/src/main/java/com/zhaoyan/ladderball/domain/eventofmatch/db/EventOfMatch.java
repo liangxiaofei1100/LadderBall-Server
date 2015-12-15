@@ -5,7 +5,7 @@ import com.zhaoyan.ladderball.domain.player.db.PlayerOfMatch;
 import javax.persistence.*;
 
 @Entity(name = "eventofmatch")
-public class EventOfMatch {
+public class EventOfMatch implements Cloneable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     public long id;
@@ -113,5 +113,16 @@ public class EventOfMatch {
                 ", uuid='" + uuid + '\'' +
                 ", playerOfMatch=" + playerOfMatch +
                 '}';
+    }
+
+    @Override
+    public Object clone(){
+        Object o = null;
+        try {
+            o = super.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        return o;
     }
 }
