@@ -1,29 +1,40 @@
 package com.zhaoyan.ladderball.domain.eventofmatch.db;
 
+import com.zhaoyan.ladderball.domain.player.db.TmpPlayerOfMatch;
+
 import javax.persistence.*;
 
 @Entity(name = "tmpeventofmatch")
-public class TmpEventOfMatch {
-
+public class TmpEventOfMatch implements Cloneable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     public long id;
+
     @Column(name = "event_code")
     public int eventCode;
+
     @Column(name = "match_id")
     public long matchId;
+
     @Column(name = "team_id")
     public long teamId;
-    @Column(name = "player_id")
-    public long playerId;
+
+    @ManyToOne
+    @JoinColumn(name = "player_id")
+    public TmpPlayerOfMatch playerOfMatch;
+
     @Column(name = "part_number")
     public int partNumber;
+
     @Column(name = "time_second")
     public long timeSecond;
+
     @Column(name = "additional_data")
     public String additionalData;
+
     @Column(name = "uuid")
     public String uuid;
+
 
     public long getId() {
         return id;
@@ -55,14 +66,6 @@ public class TmpEventOfMatch {
 
     public void setTeamId(long teamId) {
         this.teamId = teamId;
-    }
-
-    public long getPlayerId() {
-        return playerId;
-    }
-
-    public void setPlayerId(long playerId) {
-        this.playerId = playerId;
     }
 
     public int getPartNumber() {
@@ -102,13 +105,24 @@ public class TmpEventOfMatch {
         return "TmpEventOfMatch{" +
                 "id=" + id +
                 ", eventCode=" + eventCode +
-                ", teamId=" + matchId +
+                ", matchId=" + matchId +
                 ", teamId=" + teamId +
-                ", playerId=" + playerId +
                 ", partNumber=" + partNumber +
                 ", timeSecond=" + timeSecond +
                 ", additionalData='" + additionalData + '\'' +
                 ", uuid='" + uuid + '\'' +
+                ", playerOfMatch=" + playerOfMatch +
                 '}';
+    }
+
+    @Override
+    public Object clone(){
+        Object o = null;
+        try {
+            o = super.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        return o;
     }
 }

@@ -8,7 +8,6 @@ import com.zhaoyan.ladderball.dao.teamofmatch.TmpTeamOfMatchDao;
 import com.zhaoyan.ladderball.domain.match.db.TmpMatch;
 import com.zhaoyan.ladderball.domain.match.db.TmpMatchPart;
 import com.zhaoyan.ladderball.domain.match.http.*;
-import com.zhaoyan.ladderball.domain.player.db.PlayerOfMatch;
 import com.zhaoyan.ladderball.domain.player.db.TmpPlayerOfMatch;
 import com.zhaoyan.ladderball.domain.recordermatch.db.RecorderMatch;
 import com.zhaoyan.ladderball.domain.recordermatch.db.RecorderTmpMatch;
