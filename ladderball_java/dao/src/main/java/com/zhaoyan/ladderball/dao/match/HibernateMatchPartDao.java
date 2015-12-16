@@ -24,6 +24,18 @@ public class HibernateMatchPartDao implements MatchPartDao {
     }
 
     @Override
+    public MatchPart getMatchPartByMatchIdPartNumber(long matchId, int partNumber) {
+        DetachedCriteria criteria = DetachedCriteria.forClass(MatchPart.class);
+        criteria.add(Restrictions.eq("matchId", matchId));
+        criteria.add(Restrictions.eq("partNumber", partNumber));
+        List<MatchPart> matchParts = (List<MatchPart>) hibernateTemplate.findByCriteria(criteria);
+        if (!matchParts.isEmpty()) {
+            return matchParts.get(0);
+        }
+        return null;
+    }
+
+    @Override
     public MatchPart addMatchPart(MatchPart matchPart) {
         hibernateTemplate.save(matchPart);
         hibernateTemplate.flush();
@@ -32,23 +44,12 @@ public class HibernateMatchPartDao implements MatchPartDao {
     }
 
     @Override
-    public void deleteMatchPart(long matchPartId) {
-        MatchPart matchPart = hibernateTemplate.get(MatchPart.class, matchPartId);
-        if (matchPart != null) {
-            hibernateTemplate.delete(matchPart);
-        }
+    public void modifyMatchPart(MatchPart matchPart) {
+        hibernateTemplate.update(matchPart);
     }
 
     @Override
-    public void setMatchPartComplete(long matchId, int partNumber, boolean isComplete) {
-        DetachedCriteria criteria = DetachedCriteria.forClass(MatchPart.class);
-        criteria.add(Restrictions.eq("matchId", matchId));
-        criteria.add(Restrictions.eq("partNumber", partNumber));
-        List<MatchPart> matchParts = (List<MatchPart>) hibernateTemplate.findByCriteria(criteria);
-        if (!matchParts.isEmpty()) {
-            MatchPart matchPart = matchParts.get(0);
-            matchPart.isComplete = isComplete;
-            hibernateTemplate.update(matchPart);
-        }
+    public void deleteMatchPart(MatchPart matchPart) {
+        hibernateTemplate.delete(matchPart);
     }
 }

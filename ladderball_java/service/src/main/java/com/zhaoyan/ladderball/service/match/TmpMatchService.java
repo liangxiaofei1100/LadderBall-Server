@@ -88,14 +88,14 @@ public class TmpMatchService extends BaseService {
                     }
 
                     // 获取主队和客队信息
-                    TmpTeamOfMatch tmpTeamHome = tmpTeamOfMatchDao.getTmpTeamOfMatch(tmpMatch.teamHome);
+                    TmpTeamOfMatch tmpTeamHome = tmpTeamOfMatchDao.getTeamOfMatch(tmpMatch.teamHome);
                     if (tmpTeamHome != null) {
                         match.teamHome = new MatchListResponse.Team();
                         copierTmpTeamOfMatchToMatchListResponse.copy(tmpTeamHome, match.teamHome, null);
                         match.teamHome.isAsigned = recorderTmpMatch.asignedTeam == RecorderTmpMatch.ASIGNED_TEAM_HOME;
                     }
 
-                    TmpTeamOfMatch tmpTeamVisitor = tmpTeamOfMatchDao.getTmpTeamOfMatch(tmpMatch.teamVisitor);
+                    TmpTeamOfMatch tmpTeamVisitor = tmpTeamOfMatchDao.getTeamOfMatch(tmpMatch.teamVisitor);
                     if (tmpTeamVisitor != null) {
                         match.teamVisitor = new MatchListResponse.Team();
                         copierTmpTeamOfMatchToMatchListResponse.copy(tmpTeamVisitor, match.teamVisitor, null);
@@ -134,7 +134,7 @@ public class TmpMatchService extends BaseService {
             RecorderTmpMatch recorderMatch = recorderTmpMatchDao.getRecorderTmpMatchByRecorderMatch(recorderId, request.matchId);
 
             // 获取主队和客队信息
-            TmpTeamOfMatch teamHome = tmpTeamOfMatchDao.getTmpTeamOfMatch(match.teamHome);
+            TmpTeamOfMatch teamHome = tmpTeamOfMatchDao.getTeamOfMatch(match.teamHome);
             if (teamHome != null) {
                 response.teamHome = new MatchDetailResponse.Team();
                 copierTmpTeamOfMatchToMatchDetailResponse.copy(teamHome, response.teamHome, null);
@@ -146,7 +146,7 @@ public class TmpMatchService extends BaseService {
                 }
             }
 
-            TmpTeamOfMatch teamVisitor = tmpTeamOfMatchDao.getTmpTeamOfMatch(match.teamVisitor);
+            TmpTeamOfMatch teamVisitor = tmpTeamOfMatchDao.getTeamOfMatch(match.teamVisitor);
             if (teamHome != null) {
                 response.teamVisitor = new MatchDetailResponse.Team();
                 copierTmpTeamOfMatchToMatchDetailResponse.copy(teamVisitor, response.teamVisitor, null);
@@ -270,11 +270,11 @@ public class TmpMatchService extends BaseService {
         // 添加主队
         TmpTeamOfMatch teamHome = new TmpTeamOfMatch();
         teamHome.name = request.teamHomeName;
-        tmpTeamOfMatchDao.addTmpTeamOfMatch(teamHome);
+        tmpTeamOfMatchDao.addTeamOfMatch(teamHome);
         // 添加客队
         TmpTeamOfMatch teamVisitor = new TmpTeamOfMatch();
         teamVisitor.name = request.teamVisitorName;
-        tmpTeamOfMatchDao.addTmpTeamOfMatch(teamVisitor);
+        tmpTeamOfMatchDao.addTeamOfMatch(teamVisitor);
         // 添加比赛
         TmpMatch match = new TmpMatch();
         match.teamHome = teamHome.id;
@@ -317,14 +317,14 @@ public class TmpMatchService extends BaseService {
                     }
 
                     // 获取主队和客队信息
-                    TmpTeamOfMatch tmpTeamHome = tmpTeamOfMatchDao.getTmpTeamOfMatch(tmpMatch.teamHome);
+                    TmpTeamOfMatch tmpTeamHome = tmpTeamOfMatchDao.getTeamOfMatch(tmpMatch.teamHome);
                     if (tmpTeamHome != null) {
                         match.teamHome = new MatchListResponse.Team();
                         copierTmpTeamOfMatchToMatchListResponse.copy(tmpTeamHome, match.teamHome, null);
                         match.teamHome.isAsigned = recorderTmpMatch.asignedTeam == RecorderTmpMatch.ASIGNED_TEAM_HOME;
                     }
 
-                    TmpTeamOfMatch tmpTeamVisitor = tmpTeamOfMatchDao.getTmpTeamOfMatch(tmpMatch.teamVisitor);
+                    TmpTeamOfMatch tmpTeamVisitor = tmpTeamOfMatchDao.getTeamOfMatch(tmpMatch.teamVisitor);
                     if (tmpTeamVisitor != null) {
                         match.teamVisitor = new MatchListResponse.Team();
                         copierTmpTeamOfMatchToMatchListResponse.copy(tmpTeamVisitor, match.teamVisitor, null);

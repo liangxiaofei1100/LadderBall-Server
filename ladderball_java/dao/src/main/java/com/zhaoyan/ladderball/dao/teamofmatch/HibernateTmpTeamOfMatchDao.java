@@ -13,15 +13,25 @@ public class HibernateTmpTeamOfMatchDao implements TmpTeamOfMatchDao{
     HibernateTemplate hibernateTemplate;
 
     @Override
-    public TmpTeamOfMatch getTmpTeamOfMatch(long tmpTeamOfMatchId) {
+    public TmpTeamOfMatch getTeamOfMatch(long tmpTeamOfMatchId) {
         return hibernateTemplate.get(TmpTeamOfMatch.class, tmpTeamOfMatchId);
     }
 
     @Override
-    public TmpTeamOfMatch addTmpTeamOfMatch(TmpTeamOfMatch team) {
+    public TmpTeamOfMatch addTeamOfMatch(TmpTeamOfMatch team) {
         hibernateTemplate.save(team);
         hibernateTemplate.flush();
         hibernateTemplate.clear();
         return team;
+    }
+
+    @Override
+    public void modifyTeamOfMatch(TmpTeamOfMatch team) {
+        hibernateTemplate.update(team);
+    }
+
+    @Override
+    public void deleteTeamOfMatch(TmpTeamOfMatch team) {
+        hibernateTemplate.delete(team);
     }
 }

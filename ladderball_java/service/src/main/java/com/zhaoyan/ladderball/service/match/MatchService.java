@@ -237,7 +237,7 @@ public class MatchService extends BaseService {
             // 节数减少了
             for (MatchPart matchPart : matchParts) {
                 if (matchPart.partNumber > request.totalPart) {
-                    matchPartDao.deleteMatchPart(matchPart.id);
+                    matchPartDao.deleteMatchPart(matchPart);
                 }
             }
         }

@@ -1,5 +1,6 @@
 package com.zhaoyan.ladderball.dao.match;
 
+import com.zhaoyan.ladderball.domain.match.db.MatchPart;
 import com.zhaoyan.ladderball.domain.match.db.TmpMatchPart;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Restrictions;
@@ -24,6 +25,18 @@ public class HibernateTmpMatchPartDao implements TmpMatchPartDao {
     }
 
     @Override
+    public TmpMatchPart getMatchPartByMatchIdPartNumber(long matchId, int partNumber) {
+        DetachedCriteria criteria = DetachedCriteria.forClass(TmpMatchPart.class);
+        criteria.add(Restrictions.eq("matchId", matchId));
+        criteria.add(Restrictions.eq("partNumber", partNumber));
+        List<TmpMatchPart> matchParts = (List<TmpMatchPart>) hibernateTemplate.findByCriteria(criteria);
+        if (!matchParts.isEmpty()) {
+            return matchParts.get(0);
+        }
+        return null;
+    }
+
+    @Override
     public void addMatchPart(TmpMatchPart matchPart) {
         hibernateTemplate.save(matchPart);
         hibernateTemplate.flush();
@@ -31,7 +44,7 @@ public class HibernateTmpMatchPartDao implements TmpMatchPartDao {
     }
 
     @Override
-    public void updateMatchPart(TmpMatchPart matchPart) {
+    public void modifyMatchPart(TmpMatchPart matchPart) {
         hibernateTemplate.update(matchPart);
     }
 

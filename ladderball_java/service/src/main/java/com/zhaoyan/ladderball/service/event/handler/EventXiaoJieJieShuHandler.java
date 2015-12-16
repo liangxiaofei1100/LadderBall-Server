@@ -2,7 +2,7 @@ package com.zhaoyan.ladderball.service.event.handler;
 
 import com.zhaoyan.ladderball.dao.match.MatchPartDao;
 import com.zhaoyan.ladderball.domain.eventofmatch.db.EventOfMatch;
-import com.zhaoyan.ladderball.domain.eventofmatch.http.EventCollectionRequest;
+import com.zhaoyan.ladderball.domain.match.db.MatchPart;
 
 public class EventXiaoJieJieShuHandler extends EventHandler {
 
@@ -10,8 +10,14 @@ public class EventXiaoJieJieShuHandler extends EventHandler {
     public boolean handleAddEvent(EventOfMatch event) {
         logger.debug("handleEvent() event: " + event);
         MatchPartDao matchPartDao = getMatchPartDao();
-        matchPartDao.setMatchPartComplete(event.matchId, event.partNumber, true);
-        return true;
+        MatchPart matchPart = matchPartDao.getMatchPartByMatchIdPartNumber(event.matchId, event.partNumber);
+        if (matchPart != null) {
+            matchPart.isComplete = true;
+            matchPartDao.modifyMatchPart(matchPart);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override

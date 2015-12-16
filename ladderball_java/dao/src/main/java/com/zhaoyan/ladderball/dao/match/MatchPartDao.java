@@ -12,17 +12,22 @@ public interface MatchPartDao {
     List<MatchPart> getMatchParts(long matchId);
 
     /**
+     * 根据比赛和小节号获取小节
+     */
+    MatchPart getMatchPartByMatchIdPartNumber(long matchId, int partNumber);
+
+    /**
      * 添加一小节
      */
     MatchPart addMatchPart(MatchPart matchPart);
 
     /**
-     * 删除一小节
+     * 修改小节
      */
-    void deleteMatchPart(long matchPartId);
+    void modifyMatchPart(MatchPart matchPart);
 
     /**
-     * 将小节设置为已完成
+     * 删除一小节
      */
-    void setMatchPartComplete(long matchId, int partNumber, boolean isComplete);
+    void deleteMatchPart(MatchPart matchPart);
 }

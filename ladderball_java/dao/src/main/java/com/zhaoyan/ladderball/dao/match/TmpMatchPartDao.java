@@ -12,6 +12,11 @@ public interface TmpMatchPartDao {
     List<TmpMatchPart> getMatchParts(long matchId);
 
     /**
+     * 根据比赛和小节号获取小节
+     */
+    TmpMatchPart getMatchPartByMatchIdPartNumber(long matchId, int partNumber);
+
+    /**
      * 添加一小节
      */
     void addMatchPart(TmpMatchPart matchPart);
@@ -19,7 +24,7 @@ public interface TmpMatchPartDao {
     /**
      * 修改小节
      */
-    void updateMatchPart(TmpMatchPart matchPart);
+    void modifyMatchPart(TmpMatchPart matchPart);
 
     /**
      * 删除一小节
