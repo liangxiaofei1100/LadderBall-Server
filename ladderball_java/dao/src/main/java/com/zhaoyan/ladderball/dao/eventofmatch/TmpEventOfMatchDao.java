@@ -40,7 +40,7 @@ public interface TmpEventOfMatchDao {
     /**
      * 删除比赛一小节中的小节结束事件
      */
-    void deleteXiaoJieJieShuEvent(long matchId, long teamId, int partNumber);
+    void deleteXiaoJieJieShuEvent(long matchId, long teamId, int partNumber, int eventCode);
 
     /**
      * 事件的uuid是否重复

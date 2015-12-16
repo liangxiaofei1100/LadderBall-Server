@@ -80,7 +80,7 @@ public class EventService {
         eventOfMatch.playerOfMatch = playerOfMatchDao.getPlayerById(event.playerId);
         // 处理小节结束事件，此事件每小节只有一个。如果已经有了小节结束事件，再添加时，先删除原来的小节结束事件。
         if (EventCode.EVENT_XIAO_JIE_JIE_SHU == event.eventCode) {
-            eventOfMatchDao.deleteXiaoJieJieShuEvent(event.matchId, event.teamId, event.partNumber);
+            eventOfMatchDao.deleteXiaoJieJieShuEvent(event.matchId, event.teamId, event.partNumber, EventCode.EVENT_XIAO_JIE_JIE_SHU);
         }
         eventOfMatchDao.addEvent(eventOfMatch);
         return eventOfMatch;

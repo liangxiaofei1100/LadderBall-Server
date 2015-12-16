@@ -62,12 +62,13 @@ public class HibernateTmpEventOfMatchDao implements TmpEventOfMatchDao {
     }
 
     @Override
-    public void deleteXiaoJieJieShuEvent(long matchId, long teamId, int partNumber) {
+    public void deleteXiaoJieJieShuEvent(long matchId, long teamId, int partNumber, int eventCode) {
         DetachedCriteria criteria = DetachedCriteria.forClass(TmpEventOfMatch.class);
 
         criteria.add(Restrictions.eq("matchId", matchId));
         criteria.add(Restrictions.eq("teamId", teamId));
         criteria.add(Restrictions.eq("partNumber", partNumber));
+        criteria.add(Restrictions.eq("eventCode", eventCode));
         criteria.addOrder(Order.desc("timeSecond"));
         List<TmpEventOfMatch> events = (List<TmpEventOfMatch>) hibernateTemplate.findByCriteria(criteria);
 
