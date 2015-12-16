@@ -34,11 +34,10 @@ public class HibernatePlayerOfMatchDao implements PlayerOfMatchDao {
     }
 
     @Override
-    public boolean addPlayer(PlayerOfMatch player) {
+    public void addPlayer(PlayerOfMatch player) {
         hibernateTemplate.save(player);
         hibernateTemplate.flush();
         hibernateTemplate.clear();
-        return true;
     }
 
     @Override
@@ -49,5 +48,10 @@ public class HibernatePlayerOfMatchDao implements PlayerOfMatchDao {
         criteria.add(Restrictions.eq("number", player.number));
         List<PlayerOfMatch> playerOfMatches = (List<PlayerOfMatch>) hibernateTemplate.findByCriteria(criteria);
         return !playerOfMatches.isEmpty();
+    }
+
+    @Override
+    public void deletePlayer(PlayerOfMatch player) {
+        hibernateTemplate.delete(player);
     }
 }

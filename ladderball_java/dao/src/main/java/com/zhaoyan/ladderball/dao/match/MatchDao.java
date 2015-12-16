@@ -24,14 +24,15 @@ public interface MatchDao {
     /**
      * 修改比赛
      */
-    boolean modifyMatch(long id, int playerNumber, int totalPart, int partMinutes);
-
-    /**
-     * 修改比赛
-     */
     void modifyMatch(Match match);
 
+    /**
+     * 添加比赛
+     */
     void addMatch(Match match);
 
+    /**
+     * 删除比赛
+     */
     void deleteMatch(Match match);
 }

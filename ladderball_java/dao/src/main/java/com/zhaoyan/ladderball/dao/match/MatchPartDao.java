@@ -19,7 +19,7 @@ public interface MatchPartDao {
     /**
      * 添加一小节
      */
-    MatchPart addMatchPart(MatchPart matchPart);
+    void addMatchPart(MatchPart matchPart);
 
     /**
      * 修改小节

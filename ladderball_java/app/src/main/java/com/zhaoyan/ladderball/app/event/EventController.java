@@ -19,7 +19,7 @@ public class EventController {
     @Autowired
     EventService eventService;
 
-    @RequestMapping(value = "/eventcollection", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+    @RequestMapping(value = "/event/add", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
     public
     @ResponseBody
     EventCollectionResponse addEvent(@RequestBody EventCollectionRequest request) {
@@ -31,7 +31,7 @@ public class EventController {
     /**
      * 获取小节事件
      */
-    @RequestMapping(value = "/eventpartlist", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+    @RequestMapping(value = "/event/partlist", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
     public
     @ResponseBody
     EventPartListResponse getPartEvent(@RequestBody EventPartListRequest request) {

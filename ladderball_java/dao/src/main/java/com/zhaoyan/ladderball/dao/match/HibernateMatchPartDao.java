@@ -36,11 +36,10 @@ public class HibernateMatchPartDao implements MatchPartDao {
     }
 
     @Override
-    public MatchPart addMatchPart(MatchPart matchPart) {
+    public void addMatchPart(MatchPart matchPart) {
         hibernateTemplate.save(matchPart);
         hibernateTemplate.flush();
         hibernateTemplate.clear();
-        return matchPart;
     }
 
     @Override

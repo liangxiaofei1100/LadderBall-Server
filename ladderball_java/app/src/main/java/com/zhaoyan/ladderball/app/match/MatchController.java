@@ -51,7 +51,7 @@ public class MatchController {
     /**
      * 添加球员
      */
-    @RequestMapping(value = "/addplayer", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+    @RequestMapping(value = "/player/add", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
     public
     @ResponseBody
     MatchAddPlayerResponse addPlayer(@RequestBody MatchAddPlayerRequest request) {

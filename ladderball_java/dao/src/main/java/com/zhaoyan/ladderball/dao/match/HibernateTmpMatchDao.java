@@ -38,4 +38,9 @@ public class HibernateTmpMatchDao implements TmpMatchDao{
         hibernateTemplate.flush();
         hibernateTemplate.clear();
     }
+
+    @Override
+    public void deleteMatch(TmpMatch match) {
+        hibernateTemplate.delete(match);
+    }
 }

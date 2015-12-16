@@ -52,4 +52,16 @@ public class HibernateRecorderMatchDao implements RecorderMatchDao{
         }
         return null;
     }
+
+    @Override
+    public RecorderMatch getRecorderMatchById(long id) {
+        return hibernateTemplate.get(RecorderMatch.class, id);
+    }
+
+    @Override
+    public void addRecorderMatch(RecorderMatch recorderMatch) {
+        hibernateTemplate.save(recorderMatch);
+        hibernateTemplate.flush();
+        hibernateTemplate.clear();
+    }
 }

@@ -31,4 +31,9 @@ public interface TmpPlayerOfMatchDao {
      * 球员球队中是否已经有了这个号码
      */
     boolean isPlayerNumberRepeated(TmpPlayerOfMatch player);
+
+    /**
+     * 删除球员
+     */
+    void deletePlayer(TmpPlayerOfMatch player);
 }

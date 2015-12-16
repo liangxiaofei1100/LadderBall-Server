@@ -25,10 +25,15 @@ public interface PlayerOfMatchDao {
     /**
      * 添加球员
      */
-    boolean addPlayer(PlayerOfMatch player);
+    void addPlayer(PlayerOfMatch player);
 
     /**
      * 球员球队中是否已经有了这个号码
      */
     boolean isPlayerNumberRepeated(PlayerOfMatch player);
+
+    /**
+     * 删除球员
+     */
+    void deletePlayer(PlayerOfMatch player);
 }

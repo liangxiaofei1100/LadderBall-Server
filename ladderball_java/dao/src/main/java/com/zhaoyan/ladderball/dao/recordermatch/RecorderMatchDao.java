@@ -1,7 +1,6 @@
 package com.zhaoyan.ladderball.dao.recordermatch;
 
 
-import com.zhaoyan.ladderball.domain.match.db.Match;
 import com.zhaoyan.ladderball.domain.recordermatch.db.RecorderMatch;
 
 import java.util.List;
@@ -22,4 +21,14 @@ public interface RecorderMatchDao {
      * 根据记录员和比赛获取一条比赛分配信息。
      */
     RecorderMatch getRecorderMatchByRecorderMatch(long recorderId, long matchId);
+
+    /**
+     * 根据id获取
+     */
+    RecorderMatch getRecorderMatchById(long id);
+
+    /**
+     * 添加
+     */
+    void addRecorderMatch(RecorderMatch recorderMatch);
 }

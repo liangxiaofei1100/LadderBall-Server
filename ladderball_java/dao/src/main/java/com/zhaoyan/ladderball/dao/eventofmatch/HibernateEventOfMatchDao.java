@@ -29,11 +29,10 @@ public class HibernateEventOfMatchDao implements EventOfMatchDao {
     }
 
     @Override
-    public boolean addEvent(EventOfMatch eventOfMatch) {
+    public void addEvent(EventOfMatch eventOfMatch) {
         hibernateTemplate.save(eventOfMatch);
         hibernateTemplate.flush();
         hibernateTemplate.clear();
-        return true;
     }
 
     @Override

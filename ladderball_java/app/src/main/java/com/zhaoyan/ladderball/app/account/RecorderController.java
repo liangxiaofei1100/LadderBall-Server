@@ -23,7 +23,7 @@ public class RecorderController {
     @Autowired
     RecorderService recorderService;
 
-    @RequestMapping(value = "/recorderlogin", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+    @RequestMapping(value = "/recorder/login", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
     public
     @ResponseBody
     RecorderLoginResponse login(@RequestBody RecorderLoginRequest request) {
@@ -32,7 +32,7 @@ public class RecorderController {
         return response;
     }
 
-    @RequestMapping(value = "/recorderSetPassword", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+    @RequestMapping(value = "/recorder/password/set", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
     public
     @ResponseBody
     RecorderSetPasswordResponse login(@RequestBody RecorderSetPasswordRequest request) {

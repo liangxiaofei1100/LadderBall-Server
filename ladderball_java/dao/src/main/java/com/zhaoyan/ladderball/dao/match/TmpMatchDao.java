@@ -25,4 +25,9 @@ public interface TmpMatchDao {
      * 添加一场比赛
      */
     void addMatch(TmpMatch match);
+
+    /**
+     * 删除比赛
+     */
+    void deleteMatch(TmpMatch match);
 }

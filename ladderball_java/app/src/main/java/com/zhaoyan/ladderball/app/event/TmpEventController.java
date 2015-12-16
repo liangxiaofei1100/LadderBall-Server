@@ -19,7 +19,7 @@ public class TmpEventController {
     @Autowired
     TmpEventService tmpEventService;
 
-    @RequestMapping(value = "/eventcollection", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+    @RequestMapping(value = "/event/add", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
     public
     @ResponseBody
     EventCollectionResponse addEvent(@RequestBody EventCollectionRequest request) {

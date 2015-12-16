@@ -216,12 +216,18 @@ public class MatchService extends BaseService {
         MatchModifyResponse response = new MatchModifyResponse();
         response.buildOk();
         // 修改比赛表
-        boolean result = matchDao.modifyMatch(request.matchId, request.playerNumber, request.totalPart, request.partMinutes);
-        if (!result) {
+        Match match = matchDao.getMatch(request.matchId);
+        if (match == null) {
             logger.warn("modifyMatch() modify match fail. matchId: " + request.matchId);
             response.buildFail();
             return response;
+        } else {
+            match.playerNumber = request.playerNumber;
+            match.totalPart = request.totalPart;
+            match.partMinutes = request.partMinutes;
+            matchDao.modifyMatch(match);
         }
+
         // 修改比赛小节数据
         List<MatchPart> matchParts = matchPartDao.getMatchParts(request.matchId);
         if (request.totalPart > matchParts.size()) {
@@ -270,18 +276,14 @@ public class MatchService extends BaseService {
         if (isRepeatedNumber) {
             response.buildFail("不能添加重复号码的球员");
         } else {
-            boolean result = playerOfMatchDao.addPlayer(playerOfMatch);
+            playerOfMatchDao.addPlayer(playerOfMatch);
 
-            if (result) {
-                // 将结果添加到response
-                MatchAddPlayerResponse.Player resultPlayer = new MatchAddPlayerResponse.Player();
-                copierPlayerOfMatchToMatchAddPlayerResponse.copy(playerOfMatch, resultPlayer, null);
-                response.buildOk();
+            // 将结果添加到response
+            MatchAddPlayerResponse.Player resultPlayer = new MatchAddPlayerResponse.Player();
+            copierPlayerOfMatchToMatchAddPlayerResponse.copy(playerOfMatch, resultPlayer, null);
+            response.buildOk();
 
-                response.player = resultPlayer;
-            } else {
-                response.buildFail("添加球员失败");
-            }
+            response.player = resultPlayer;
         }
 
         return response;
@@ -320,7 +322,7 @@ public class MatchService extends BaseService {
 
         // 添加比赛
         Match match = new Match();
-        copierMatchAddRequestToMatch.copy(request,match,null);
+        copierMatchAddRequestToMatch.copy(request, match, null);
         match.teamHome = teamHome.id;
         match.teamVisitor = teamVisitor.id;
         match.startTime = new Date(request.startTime);

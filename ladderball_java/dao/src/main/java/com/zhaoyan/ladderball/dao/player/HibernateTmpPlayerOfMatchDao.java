@@ -49,4 +49,9 @@ public class HibernateTmpPlayerOfMatchDao implements TmpPlayerOfMatchDao{
         List<TmpPlayerOfMatch> playerOfMatches = (List<TmpPlayerOfMatch>) hibernateTemplate.findByCriteria(criteria);
         return !playerOfMatches.isEmpty();
     }
+
+    @Override
+    public void deletePlayer(TmpPlayerOfMatch player) {
+        hibernateTemplate.delete(player);
+    }
 }
