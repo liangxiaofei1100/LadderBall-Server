@@ -70,9 +70,9 @@ public class MatchService extends BaseService {
 
 
     /**
-     * 获取当前用户的比赛
+     * 获取记录员分配的比赛
      */
-    public MatchListResponse getMatchList(MatchListRequest request) {
+    public MatchListResponse getRecorderMatchList(MatchListRequest request) {
         MatchListResponse response = new MatchListResponse();
         response.buildOk();
         response.matches = new ArrayList<>();
@@ -94,7 +94,7 @@ public class MatchService extends BaseService {
 
         if (recorderMatches != null) {
             for (RecorderMatch recorderMatch : recorderMatches) {
-                logger.debug("getMatchList() RecorderMatch: " + recorderMatch);
+                logger.debug("getRecorderMatchList() RecorderMatch: " + recorderMatch);
                 Match match = recorderMatch.match;
                 if (match != null) {
                     MatchListResponse.Match m = new MatchListResponse.Match();
@@ -313,11 +313,13 @@ public class MatchService extends BaseService {
         // 添加主队
         TeamOfMatch teamHome = new TeamOfMatch();
         teamHome.name = request.teamHomeName;
+        teamHome.color = request.teamHomeColor;
         teamOfMatchDao.addTeamOfMatch(teamHome);
 
         // 添加客队
         TeamOfMatch teamVisitor = new TeamOfMatch();
         teamVisitor.name = request.teamVisitorName;
+        teamVisitor.color = request.teamVisitorColor;
         teamOfMatchDao.addTeamOfMatch(teamVisitor);
 
         // 添加比赛

@@ -11,9 +11,17 @@ public class MatchAddRequest extends Request {
      */
     public String teamHomeName;
     /**
+     * 主队颜色
+     */
+    public String teamHomeColor;
+    /**
      * 客队名称
      */
     public String teamVisitorName;
+    /**
+     * 客队颜色
+     */
+    public String teamVisitorColor;
     /**
      * 赛制人数
      */

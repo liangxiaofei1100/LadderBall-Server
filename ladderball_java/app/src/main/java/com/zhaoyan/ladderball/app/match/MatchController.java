@@ -25,8 +25,8 @@ public class MatchController {
     public
     @ResponseBody
     MatchListResponse getMatchList(@RequestBody MatchListRequest request) {
-        logger.debug("getMatchList() MatchListRequest: " + request);
-        MatchListResponse response = matchService.getMatchList(request);
+        logger.debug("getRecorderMatchList() MatchListRequest: " + request);
+        MatchListResponse response = matchService.getRecorderMatchList(request);
         return response;
     }
 
@@ -80,5 +80,4 @@ public class MatchController {
         MatchAddResponse response = matchService.addMatch(request);
         return response;
     }
-
 }
