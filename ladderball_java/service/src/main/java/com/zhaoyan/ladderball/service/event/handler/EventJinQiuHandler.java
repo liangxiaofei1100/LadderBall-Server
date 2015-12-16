@@ -9,19 +9,23 @@ public class EventJinQiuHandler extends EventHandler {
 
     @Override
     public boolean handleAddEvent(EventOfMatch event) {
-        // 更新球员数据
-        updatePlayerOfMatch(event.eventCode, event.playerOfMatch.id);
-        // 更新本球队得分
-        updateTeamScore(event.matchId, event.teamId);
+        if (event.playerOfMatch != null) {
+            // 更新球员数据
+            updatePlayerOfMatch(event.eventCode, event.playerOfMatch.id);
+            // 更新本球队得分
+            updateTeamScore(event.matchId, event.teamId);
+        }
         return true;
     }
 
     @Override
     public boolean handleDeleteEvent(EventOfMatch event) {
-        // 更新球员数据
-        updatePlayerOfMatch(event.eventCode, event.playerOfMatch.id);
-        // 更新本球队得分
-        updateTeamScore(event.matchId, event.teamId);
+        if (event.playerOfMatch != null) {
+            // 更新球员数据
+            updatePlayerOfMatch(event.eventCode, event.playerOfMatch.id);
+            // 更新本球队得分
+            updateTeamScore(event.matchId, event.teamId);
+        }
         return true;
     }
 

@@ -20,6 +20,28 @@ public class HibernateRecorderTmpMatchDao implements RecorderTmpMatchDao{
     HibernateTemplate hibernateTemplate;
 
     @Override
+    public RecorderTmpMatch getRecorderMatchById(long id) {
+        return hibernateTemplate.get(RecorderTmpMatch.class, id);
+    }
+
+    @Override
+    public void addRecorderMatch(RecorderTmpMatch recorderMatch) {
+        hibernateTemplate.save(recorderMatch);
+        hibernateTemplate.flush();
+        hibernateTemplate.clear();
+    }
+
+    @Override
+    public void modifyRecorderMatch(RecorderTmpMatch recorderMatch) {
+        hibernateTemplate.update(recorderMatch);
+    }
+
+    @Override
+    public void deleteRecorderMatch(RecorderTmpMatch recorderMatch) {
+        hibernateTemplate.delete(recorderMatch);
+    }
+
+    @Override
     public List<RecorderTmpMatch> getRecorderTmpMatchByRecorder(long recorderId) {
         DetachedCriteria criteria = DetachedCriteria.forClass(RecorderTmpMatch.class);
         criteria.add(Restrictions.eq("recorderId", recorderId));

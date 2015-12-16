@@ -7,6 +7,26 @@ import java.util.List;
 public interface RecorderTmpMatchDao {
 
     /**
+     * 根据id获取
+     */
+    RecorderTmpMatch getRecorderMatchById(long id);
+
+    /**
+     * 添加
+     */
+    void addRecorderMatch(RecorderTmpMatch recorderMatch);
+
+    /**
+     * 修改
+     */
+    void modifyRecorderMatch(RecorderTmpMatch recorderMatch);
+
+    /**
+     * 删除
+     */
+    void deleteRecorderMatch(RecorderTmpMatch recorderMatch);
+
+    /**
      * 根据记录者id获取记录者所有的比赛
      */
     List<RecorderTmpMatch> getRecorderTmpMatchByRecorder(long recorderId);

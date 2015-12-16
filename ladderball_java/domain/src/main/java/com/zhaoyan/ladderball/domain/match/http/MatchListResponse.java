@@ -65,7 +65,7 @@ public class MatchListResponse extends Response{
             this.address = address;
         }
 
-        public boolean isComplete() {
+        public boolean getComplete() {
             return complete;
         }
 

@@ -93,7 +93,7 @@ public class Match {
         this.partMinutes = partMinutes;
     }
 
-    public boolean getIsComplete() {
+    public boolean getComplete() {
         return complete;
     }
 

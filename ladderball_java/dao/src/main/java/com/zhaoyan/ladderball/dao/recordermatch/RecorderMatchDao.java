@@ -31,4 +31,14 @@ public interface RecorderMatchDao {
      * 添加
      */
     void addRecorderMatch(RecorderMatch recorderMatch);
+
+    /**
+     * 修改
+     */
+    void modifyRecorderMatch(RecorderMatch recorderMatch);
+
+    /**
+     * 删除
+     */
+    void deleteRecorderMatch(RecorderMatch recorderMatch);
 }

@@ -64,4 +64,14 @@ public class HibernateRecorderMatchDao implements RecorderMatchDao{
         hibernateTemplate.flush();
         hibernateTemplate.clear();
     }
+
+    @Override
+    public void modifyRecorderMatch(RecorderMatch recorderMatch) {
+        hibernateTemplate.update(recorderMatch);
+    }
+
+    @Override
+    public void deleteRecorderMatch(RecorderMatch recorderMatch) {
+        hibernateTemplate.delete(recorderMatch);
+    }
 }

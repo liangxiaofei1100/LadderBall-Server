@@ -65,8 +65,12 @@ public class UpdateCountEventHandler extends EventHandler {
 
     @Override
     public boolean handleAddEvent(EventOfMatch event) {
-        // 更新球员数据
-        return updatePlayerOfMatch(event.eventCode, event.playerOfMatch.id);
+        if (event.playerOfMatch != null) {
+            // 更新球员数据
+            return updatePlayerOfMatch(event.eventCode, event.playerOfMatch.id);
+        } else {
+            return true;
+        }
     }
 
     @Override

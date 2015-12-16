@@ -15,19 +15,23 @@ public class EventWuLongQiuHandler extends EventHandler {
 
     @Override
     public boolean handleAddEvent(TmpEventOfMatch event) {
-        // 更新球员数据
-        updateplayerOfMatch(event.eventCode, event.playerOfMatch.id);
-        // 更新对面球队得分
-        updateOppositeTeamScore(event.matchId, event.teamId);
+        if (event.playerOfMatch != null) {
+            // 更新球员数据
+            updateplayerOfMatch(event.eventCode, event.playerOfMatch.id);
+            // 更新对面球队得分
+            updateOppositeTeamScore(event.matchId, event.teamId);
+        }
         return true;
     }
 
     @Override
     public boolean handleDeleteEvent(TmpEventOfMatch event) {
-        // 更新球员数据
-        updateplayerOfMatch(event.eventCode, event.playerOfMatch.id);
-        // 更新对面球队得分
-        updateOppositeTeamScore(event.matchId, event.teamId);
+        if (event.playerOfMatch != null) {
+            // 更新球员数据
+            updateplayerOfMatch(event.eventCode, event.playerOfMatch.id);
+            // 更新对面球队得分
+            updateOppositeTeamScore(event.matchId, event.teamId);
+        }
         return true;
     }
 
