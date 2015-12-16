@@ -65,5 +65,25 @@ public class HibernateRecorderDao implements RecorderDao {
         }
     }
 
+    @Override
+    public Recorder getRecorderById(long id) {
+        return hibernateTemplate.get(Recorder.class, id);
+    }
 
+    @Override
+    public void modifyRecorder(Recorder recorder) {
+        hibernateTemplate.update(recorder);
+    }
+
+    @Override
+    public void deleteRecorder(Recorder recorder) {
+        hibernateTemplate.delete(recorder);
+    }
+
+    @Override
+    public void addRecorder(Recorder recorder) {
+        hibernateTemplate.save(recorder);
+        hibernateTemplate.flush();
+        hibernateTemplate.clear();
+    }
 }

@@ -23,6 +23,11 @@ public interface RecorderMatchDao {
     RecorderMatch getRecorderMatchByRecorderMatch(long recorderId, long matchId);
 
     /**
+     * 根据比赛id获取比赛的记录员
+     */
+    List<RecorderMatch> getRecordByMatchId(long matchId);
+
+    /**
      * 根据id获取
      */
     RecorderMatch getRecorderMatchById(long id);

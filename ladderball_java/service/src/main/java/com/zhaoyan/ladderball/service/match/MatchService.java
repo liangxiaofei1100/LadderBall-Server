@@ -1,10 +1,12 @@
 package com.zhaoyan.ladderball.service.match;
 
+import com.zhaoyan.ladderball.dao.account.RecorderDao;
 import com.zhaoyan.ladderball.dao.match.MatchDao;
 import com.zhaoyan.ladderball.dao.match.MatchPartDao;
 import com.zhaoyan.ladderball.dao.player.PlayerOfMatchDao;
 import com.zhaoyan.ladderball.dao.recordermatch.RecorderMatchDao;
 import com.zhaoyan.ladderball.dao.teamofmatch.TeamOfMatchDao;
+import com.zhaoyan.ladderball.domain.account.db.Recorder;
 import com.zhaoyan.ladderball.domain.match.db.Match;
 import com.zhaoyan.ladderball.domain.match.db.MatchPart;
 import com.zhaoyan.ladderball.domain.match.http.*;
@@ -26,6 +28,10 @@ import java.util.List;
 @Service
 public class MatchService extends BaseService {
     Logger logger = LoggerFactory.getLogger(MatchService.class);
+
+    @Autowired
+    @Qualifier("hibernateRecorderDao")
+    RecorderDao recorderDao;
 
     @Autowired
     @Qualifier("hibernateMatchDao")
@@ -124,6 +130,7 @@ public class MatchService extends BaseService {
 
         return response;
     }
+
 
     /**
      * 获取比赛详情
@@ -331,6 +338,71 @@ public class MatchService extends BaseService {
         matchDao.addMatch(match);
 
         MatchAddResponse response = new MatchAddResponse();
+        response.buildOk();
+        return response;
+    }
+
+
+    // 查询所有比赛
+    private static BeanCopier copierMatchToMatchAllListResponse =
+            BeanCopier.create(Match.class, MatchAllListResponse.Match.class, false);
+    private static BeanCopier copierTeamOfMatchToMatchAllListResponse =
+            BeanCopier.create(TeamOfMatch.class, MatchAllListResponse.Team.class, false);
+    private static BeanCopier copierRecorderToMatchAllListResponse =
+            BeanCopier.create(Recorder.class, MatchAllListResponse.Recorder.class, false);
+
+    /**
+     * 查询所有比赛，管理平台使用
+     */
+    public MatchAllListResponse getAllMatch(MatchAllListRequest request) {
+        MatchAllListResponse response = new MatchAllListResponse();
+        response.matches = new ArrayList<>();
+
+        // 所有比赛
+        List<Match> matches = matchDao.getAllMatch();
+        for (Match match : matches) {
+            MatchAllListResponse.Match responseMatch = new MatchAllListResponse.Match();
+            copierMatchToMatchAllListResponse.copy(match, responseMatch, null);
+            if (match.startTime != null) {
+                responseMatch.startTime = match.startTime.getTime();
+            }
+
+            // 主队信息
+            TeamOfMatch teamHome = teamOfMatchDao.getTeamOfMatch(match.teamHome);
+            if (teamHome != null) {
+                responseMatch.teamHome = new MatchAllListResponse.Team();
+                copierTeamOfMatchToMatchAllListResponse.copy(teamHome, responseMatch.teamHome, null);
+            }
+            // 客队信息
+            TeamOfMatch teamVisitor = teamOfMatchDao.getTeamOfMatch(match.teamVisitor);
+            if (teamVisitor != null) {
+                responseMatch.teamVisitor = new MatchAllListResponse.Team();
+                copierTeamOfMatchToMatchAllListResponse.copy(teamVisitor, responseMatch.teamVisitor, null);
+            }
+
+            // 记录员
+            List<RecorderMatch> recorderMatches = recorderMatchDao.getRecordByMatchId(match.id);
+            for (RecorderMatch recorderMatch : recorderMatches) {
+                if (RecorderMatch.ASIGNED_TEAM_HOME == recorderMatch.asignedTeam) {
+                    // 主队记录员
+                    Recorder recorder = recorderDao.getRecorderById(recorderMatch.recorderId);
+                    if (recorder != null) {
+                        responseMatch.recorderHome = new MatchAllListResponse.Recorder();
+                        copierRecorderToMatchAllListResponse.copy(recorder, responseMatch.recorderHome, null);
+                    }
+                } else if (RecorderMatch.ASIGNED_TEAM_VISITOR == recorderMatch.asignedTeam) {
+                    // 客队记录员
+                    Recorder recorder = recorderDao.getRecorderById(recorderMatch.recorderId);
+                    if (recorder != null) {
+                        responseMatch.recorderVisitor = new MatchAllListResponse.Recorder();
+                        copierRecorderToMatchAllListResponse.copy(recorder, responseMatch.recorderVisitor, null);
+                    }
+                }
+            }
+
+            response.matches.add(responseMatch);
+        }
+
         response.buildOk();
         return response;
     }
