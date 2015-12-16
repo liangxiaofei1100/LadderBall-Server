@@ -71,13 +71,4 @@ public class MatchController {
         MatchSubmitResponse response = matchService.submitMatch(request);
         return response;
     }
-
-    @RequestMapping(value = "/add", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
-    public
-    @ResponseBody
-    MatchAddResponse addMatch(@RequestBody MatchAddRequest request) {
-        logger.debug("addMatch() MatchAddRequest: " + request);
-        MatchAddResponse response = matchService.addMatch(request);
-        return response;
-    }
 }

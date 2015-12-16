@@ -1,4 +1,4 @@
-package com.zhaoyan.ladderball.app.account;
+package com.zhaoyan.ladderball.management.account;
 
 import com.zhaoyan.ladderball.domain.account.http.AdministratorLoginRequest;
 import com.zhaoyan.ladderball.domain.account.http.AdministratorLoginResponse;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @RequestMapping("/account/admin")
 public class AdministratorController {
-    Logger logger = LoggerFactory.getLogger(RecorderController.class);
+    Logger logger = LoggerFactory.getLogger(AdministratorController.class);
 
     @Autowired
     AdministratorService administratorService;

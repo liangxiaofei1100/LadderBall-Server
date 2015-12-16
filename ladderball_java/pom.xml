@@ -13,6 +13,7 @@
         <module>service</module>
         <module>domain</module>
         <module>app</module>
+        <module>management</module>
     </modules>
 
     <properties>
