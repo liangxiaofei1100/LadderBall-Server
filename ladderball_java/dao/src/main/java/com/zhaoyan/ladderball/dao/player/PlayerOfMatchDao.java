@@ -15,7 +15,7 @@ public interface PlayerOfMatchDao {
     /**
      * 根据id获取球员
      */
-    PlayerOfMatch getPlayerByPlayerOfMatchId(long playerOfMatchId);
+    PlayerOfMatch getPlayerById(long playerOfMatchId);
 
     /**
      * 修改球员

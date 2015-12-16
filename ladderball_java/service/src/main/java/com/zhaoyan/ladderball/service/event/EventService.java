@@ -77,7 +77,7 @@ public class EventService {
     private EventOfMatch saveEvent(EventCollectionRequest.Event event) {
         EventOfMatch eventOfMatch = new EventOfMatch();
         copierEventCollectionRequestToEventOfMatch.copy(event, eventOfMatch, null);
-        eventOfMatch.playerOfMatch = playerOfMatchDao.getPlayerByPlayerOfMatchId(event.playerId);
+        eventOfMatch.playerOfMatch = playerOfMatchDao.getPlayerById(event.playerId);
         // 处理小节结束事件，此事件每小节只有一个。如果已经有了小节结束事件，再添加时，先删除原来的小节结束事件。
         if (EventCode.EVENT_XIAO_JIE_JIE_SHU == event.eventCode) {
             eventOfMatchDao.deleteXiaoJieJieShuEvent(event.matchId, event.teamId, event.partNumber);
@@ -129,7 +129,7 @@ public class EventService {
             // clone对象，因为update之后，原来的对象也被改变了。
             originalEventOfMatch = (EventOfMatch) originalEventOfMatch.clone();
             copierEventModifyRequestToEventOfMatch.copy(request, newEventOfMatch, null);
-            newEventOfMatch.playerOfMatch = playerOfMatchDao.getPlayerByPlayerOfMatchId(request.playerId);
+            newEventOfMatch.playerOfMatch = playerOfMatchDao.getPlayerById(request.playerId);
             eventOfMatchDao.updateEvent(newEventOfMatch);
 
             // 处理事件

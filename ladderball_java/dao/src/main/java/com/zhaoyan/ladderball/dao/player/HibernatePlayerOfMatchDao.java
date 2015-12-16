@@ -24,7 +24,7 @@ public class HibernatePlayerOfMatchDao implements PlayerOfMatchDao {
     }
 
     @Override
-    public PlayerOfMatch getPlayerByPlayerOfMatchId(long playerOfMatchId) {
+    public PlayerOfMatch getPlayerById(long playerOfMatchId) {
         return hibernateTemplate.get(PlayerOfMatch.class, playerOfMatchId);
     }
 

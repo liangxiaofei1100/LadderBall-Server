@@ -40,7 +40,7 @@ public class EventWuLongQiuHandler extends EventHandler {
         int eventCount = eventOfMatchDao.getEventCountByPlayer(eventCode, playerId);
         // 更新个人事件个数
         PlayerOfMatchDao playerOfMatchDao = getPlayerOfMatchDao();
-        PlayerOfMatch playerOfMatch = playerOfMatchDao.getPlayerByPlayerOfMatchId(playerId);
+        PlayerOfMatch playerOfMatch = playerOfMatchDao.getPlayerById(playerId);
         playerOfMatch.event10027 = eventCount;
         playerOfMatchDao.modifyPlayer(playerOfMatch);
     }

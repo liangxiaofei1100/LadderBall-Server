@@ -244,7 +244,7 @@ public class MatchService extends BaseService {
 
         // 修改球员数据
         for (MatchModifyRequest.Player player : request.players) {
-            PlayerOfMatch newPlayer = playerOfMatchDao.getPlayerByPlayerOfMatchId(player.id);
+            PlayerOfMatch newPlayer = playerOfMatchDao.getPlayerById(player.id);
             if (newPlayer != null) {
                 copierMatchModifyReqestToPlayer.copy(player, newPlayer, null);
                 playerOfMatchDao.modifyPlayer(newPlayer);

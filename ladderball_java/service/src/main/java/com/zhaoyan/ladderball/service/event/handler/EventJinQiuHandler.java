@@ -34,7 +34,7 @@ public class EventJinQiuHandler extends EventHandler {
         int jinQiuCount = eventOfMatchDao.getEventCountByPlayer(eventCode, playerId);
         // 更新个人进球个数
         PlayerOfMatchDao playerOfMatchDao = getPlayerOfMatchDao();
-        PlayerOfMatch playerOfMatch = playerOfMatchDao.getPlayerByPlayerOfMatchId(playerId);
+        PlayerOfMatch playerOfMatch = playerOfMatchDao.getPlayerById(playerId);
         playerOfMatch.event10001 = jinQiuCount;
         playerOfMatchDao.modifyPlayer(playerOfMatch);
     }
