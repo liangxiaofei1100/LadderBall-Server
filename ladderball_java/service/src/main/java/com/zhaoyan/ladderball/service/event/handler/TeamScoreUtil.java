@@ -30,7 +30,7 @@ public class TeamScoreUtil {
     public static void updateTeamScore(TeamOfMatchDao teamOfMatchDao, PlayerOfMatchDao playerOfMatchDao, long teamId, long oppositeTeamId) {
         TeamOfMatch teamOfMatch = teamOfMatchDao.getTeamOfMatch(teamId);
         teamOfMatch.score = calculateTeamScore(playerOfMatchDao, teamId, oppositeTeamId);
-        teamOfMatchDao.updateTeamOfMatch(teamOfMatch);
+        teamOfMatchDao.modifyTeamOfMatch(teamOfMatch);
     }
 
     /**

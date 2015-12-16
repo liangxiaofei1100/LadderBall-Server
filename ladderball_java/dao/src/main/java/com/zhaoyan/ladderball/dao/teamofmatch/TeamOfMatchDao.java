@@ -10,7 +10,17 @@ public interface TeamOfMatchDao {
     TeamOfMatch getTeamOfMatch(long teamOfMatchId);
 
     /**
+     * 添加一个球队
+     */
+    void addTeamOfMatch(TeamOfMatch teamOfMatch);
+
+    /**
      * 修改球队
      */
-    boolean updateTeamOfMatch(TeamOfMatch teamOfMatch);
+    void modifyTeamOfMatch(TeamOfMatch teamOfMatch);
+
+    /**
+     * 删除一个球队
+     */
+    void deleteTeamOfMatch(TeamOfMatch teamOfMatch);
 }

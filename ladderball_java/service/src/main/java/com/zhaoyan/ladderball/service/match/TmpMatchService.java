@@ -266,7 +266,7 @@ public class TmpMatchService extends BaseService {
     /**
      * 添加一场练习赛
      */
-    public AddTmpMatchResponse addMatch(AddTmpMatchRequest request) {
+    public MatchAddResponse addMatch(MatchAddRequest request) {
         // 添加主队
         TmpTeamOfMatch teamHome = new TmpTeamOfMatch();
         teamHome.name = request.teamHomeName;
@@ -288,7 +288,7 @@ public class TmpMatchService extends BaseService {
         recorderTmpMatch.asignedTeam = RecorderTmpMatch.ASIGNED_TEAM_HOME;
         recorderTmpMatchDao.addRecorderTmpMatch(recorderTmpMatch);
 
-        AddTmpMatchResponse response = new AddTmpMatchResponse();
+        MatchAddResponse response = new MatchAddResponse();
         response.buildOk();
         return response;
     }

@@ -47,8 +47,19 @@ public class HibernateMatchDao implements MatchDao {
     }
 
     @Override
-    public boolean modifyMatch(Match match) {
+    public void modifyMatch(Match match) {
         hibernateTemplate.update(match);
-        return true;
+    }
+
+    @Override
+    public void addMatch(Match match) {
+        hibernateTemplate.save(match);
+        hibernateTemplate.flush();
+        hibernateTemplate.clear();
+    }
+
+    @Override
+    public void deleteMatch(Match match) {
+        hibernateTemplate.delete(match);
     }
 }

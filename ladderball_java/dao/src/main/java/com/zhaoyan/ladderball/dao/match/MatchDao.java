@@ -29,5 +29,9 @@ public interface MatchDao {
     /**
      * 修改比赛
      */
-    boolean modifyMatch(Match match);
+    void modifyMatch(Match match);
+
+    void addMatch(Match match);
+
+    void deleteMatch(Match match);
 }

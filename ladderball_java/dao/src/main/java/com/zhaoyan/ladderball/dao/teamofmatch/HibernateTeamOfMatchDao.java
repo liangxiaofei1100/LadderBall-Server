@@ -16,8 +16,19 @@ public class HibernateTeamOfMatchDao implements TeamOfMatchDao {
     }
 
     @Override
-    public boolean updateTeamOfMatch(TeamOfMatch teamOfMatch) {
+    public void addTeamOfMatch(TeamOfMatch teamOfMatch) {
+        hibernateTemplate.save(teamOfMatch);
+        hibernateTemplate.flush();
+        hibernateTemplate.clear();
+    }
+
+    @Override
+    public void modifyTeamOfMatch(TeamOfMatch teamOfMatch) {
         hibernateTemplate.update(teamOfMatch);
-        return true;
+    }
+
+    @Override
+    public void deleteTeamOfMatch(TeamOfMatch teamOfMatch) {
+        hibernateTemplate.delete(teamOfMatch);
     }
 }

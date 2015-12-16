@@ -76,9 +76,9 @@ public class TmpMatchController {
     @RequestMapping(value = "/add", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
     public
     @ResponseBody
-    AddTmpMatchResponse addMatch(@RequestBody AddTmpMatchRequest request) {
-        logger.debug("addMatch() AddTmpMatchRequest: " + request);
-        AddTmpMatchResponse response = tmpMatchService.addMatch(request);
+    MatchAddResponse addMatch(@RequestBody MatchAddRequest request) {
+        logger.debug("addMatch() MatchAddRequest: " + request);
+        MatchAddResponse response = tmpMatchService.addMatch(request);
         return response;
     }
 

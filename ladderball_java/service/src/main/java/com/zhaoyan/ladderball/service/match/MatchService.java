@@ -20,6 +20,7 @@ import org.springframework.cglib.beans.BeanCopier;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -62,6 +63,11 @@ public class MatchService extends BaseService {
             BeanCopier.create(MatchAddPlayerRequest.Player.class, PlayerOfMatch.class, false);
     private static BeanCopier copierPlayerOfMatchToMatchAddPlayerResponse =
             BeanCopier.create(PlayerOfMatch.class, MatchAddPlayerResponse.Player.class, false);
+
+    // 添加比赛
+    private static BeanCopier copierMatchAddRequestToMatch =
+            BeanCopier.create(MatchAddRequest.class, Match.class, false);
+
 
     /**
      * 获取当前用户的比赛
@@ -292,13 +298,36 @@ public class MatchService extends BaseService {
             response.buildFail("无法找到该场比赛");
         } else {
             match.complete = true;
-            boolean result = matchDao.modifyMatch(match);
-            if (result) {
-                response.buildOk();
-            } else {
-                response.buildFail();
-            }
+            matchDao.modifyMatch(match);
+            response.buildOk();
         }
+        return response;
+    }
+
+    /**
+     * 添加一场比赛
+     */
+    public MatchAddResponse addMatch(MatchAddRequest request) {
+        // 添加主队
+        TeamOfMatch teamHome = new TeamOfMatch();
+        teamHome.name = request.teamHomeName;
+        teamOfMatchDao.addTeamOfMatch(teamHome);
+
+        // 添加客队
+        TeamOfMatch teamVisitor = new TeamOfMatch();
+        teamVisitor.name = request.teamVisitorName;
+        teamOfMatchDao.addTeamOfMatch(teamVisitor);
+
+        // 添加比赛
+        Match match = new Match();
+        copierMatchAddRequestToMatch.copy(request,match,null);
+        match.teamHome = teamHome.id;
+        match.teamVisitor = teamVisitor.id;
+        match.startTime = new Date(request.startTime);
+        matchDao.addMatch(match);
+
+        MatchAddResponse response = new MatchAddResponse();
+        response.buildOk();
         return response;
     }
 }
