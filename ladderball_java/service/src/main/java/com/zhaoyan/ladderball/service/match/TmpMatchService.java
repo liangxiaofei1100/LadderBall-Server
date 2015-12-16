@@ -5,7 +5,6 @@ import com.zhaoyan.ladderball.dao.match.TmpMatchPartDao;
 import com.zhaoyan.ladderball.dao.player.TmpPlayerOfMatchDao;
 import com.zhaoyan.ladderball.dao.recordermatch.RecorderTmpMatchDao;
 import com.zhaoyan.ladderball.dao.teamofmatch.TmpTeamOfMatchDao;
-import com.zhaoyan.ladderball.domain.match.db.Match;
 import com.zhaoyan.ladderball.domain.match.db.TmpMatch;
 import com.zhaoyan.ladderball.domain.match.db.TmpMatchPart;
 import com.zhaoyan.ladderball.domain.match.http.*;
@@ -56,8 +55,8 @@ public class TmpMatchService extends BaseService {
             BeanCopier.create(TmpTeamOfMatch.class, MatchDetailResponse.Team.class, false);
     private static BeanCopier copierTmpPlayerOfMatchToMatchDetailResponse =
             BeanCopier.create(TmpPlayerOfMatch.class, MatchDetailResponse.Player.class, false);
-    private static BeanCopier copierTmpMatchModifyRequestToTmpPlayerOfMatch =
-            BeanCopier.create(TmpMatchModifyRequest.Player.class, TmpPlayerOfMatch.class, false);
+    private static BeanCopier copierMatchModifyRequestToTmpPlayerOfMatch =
+            BeanCopier.create(MatchModifyRequest.Player.class, TmpPlayerOfMatch.class, false);
 
     // 添加球员
     private static BeanCopier copierMatchAddPlayerRequestToTmpPlayerOfMatch =
@@ -218,8 +217,8 @@ public class TmpMatchService extends BaseService {
     /**
      * 修改练习赛
      */
-    public TmpMatchModifyResponse modifyTmpMatch(TmpMatchModifyRequest request) {
-        TmpMatchModifyResponse response = new TmpMatchModifyResponse();
+    public MatchModifyResponse modifyMatch(MatchModifyRequest request) {
+        MatchModifyResponse response = new MatchModifyResponse();
         response.buildOk();
 
         // 修改比赛表
@@ -256,10 +255,10 @@ public class TmpMatchService extends BaseService {
         }
 
         // 修改球员数据
-        for (TmpMatchModifyRequest.Player player : request.players) {
+        for (MatchModifyRequest.Player player : request.players) {
             TmpPlayerOfMatch newPlayer = tmpPlayerOfMatchDao.getPlayerById(player.id);
             if (newPlayer != null) {
-                copierTmpMatchModifyRequestToTmpPlayerOfMatch.copy(player, newPlayer, null);
+                copierMatchModifyRequestToTmpPlayerOfMatch.copy(player, newPlayer, null);
                 tmpPlayerOfMatchDao.modifyPlayer(newPlayer);
             } else {
                 logger.warn("modifyTmpMatch() error, player id not found. playerId: " + player.id);
@@ -347,8 +346,8 @@ public class TmpMatchService extends BaseService {
     /**
      * 记录者领取练习赛，只能领取客场队伍
      */
-    public TmpMatchAsignVisitorResponse asignTmpMatchVisitor(TmpMatchAsignVisitorRequest request) {
-        TmpMatchAsignVisitorResponse response = new TmpMatchAsignVisitorResponse();
+    public MatchAsignVisitorResponse asignTmpMatchVisitor(MatchAsignVisitorRequest request) {
+        MatchAsignVisitorResponse response = new MatchAsignVisitorResponse();
 
         long recorderId = getRecorderIdFromUserToken(request.header.userToken);
         boolean isAlreadyAsigned = recorderTmpMatchDao.isTmpMatchAsignedToRecorder(recorderId, request.matchId);

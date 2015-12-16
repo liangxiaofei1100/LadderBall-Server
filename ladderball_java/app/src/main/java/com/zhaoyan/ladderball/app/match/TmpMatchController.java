@@ -49,9 +49,9 @@ public class TmpMatchController {
     @RequestMapping(value = "/asignvisitor", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
     public
     @ResponseBody
-    TmpMatchAsignVisitorResponse asignTmpMatchVisitor(@RequestBody TmpMatchAsignVisitorRequest request) {
-        logger.debug("asignTmpMatchVisitor() TmpMatchAsignVisitorRequest: " + request);
-        TmpMatchAsignVisitorResponse response = tmpMatchService.asignTmpMatchVisitor(request);
+    MatchAsignVisitorResponse asignTmpMatchVisitor(@RequestBody MatchAsignVisitorRequest request) {
+        logger.debug("asignTmpMatchVisitor() MatchAsignVisitorRequest: " + request);
+        MatchAsignVisitorResponse response = tmpMatchService.asignTmpMatchVisitor(request);
         return response;
     }
 
@@ -67,9 +67,9 @@ public class TmpMatchController {
     @RequestMapping(value = "/modify", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
     public
     @ResponseBody
-    TmpMatchModifyResponse modifyMatch(@RequestBody TmpMatchModifyRequest request) {
-        logger.debug("getMatchDetail() TmpMatchModifyRequest: " + request);
-        TmpMatchModifyResponse response = tmpMatchService.modifyTmpMatch(request);
+    MatchModifyResponse modifyMatch(@RequestBody MatchModifyRequest request) {
+        logger.debug("modifyMatch() MatchModifyRequest: " + request);
+        MatchModifyResponse response = tmpMatchService.modifyMatch(request);
         return response;
     }
 

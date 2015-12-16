@@ -175,7 +175,6 @@ public class MatchAllListResponse extends Response {
     public static class Recorder {
         public long id;
         public String phone;
-        public String password;
         public String name;
         public String address;
         public int gender;
@@ -194,14 +193,6 @@ public class MatchAllListResponse extends Response {
 
         public void setPhone(String phone) {
             this.phone = phone;
-        }
-
-        public String getPassword() {
-            return password;
-        }
-
-        public void setPassword(String password) {
-            this.password = password;
         }
 
         public String getName() {
