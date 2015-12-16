@@ -5,6 +5,7 @@ import com.zhaoyan.ladderball.dao.match.TmpMatchPartDao;
 import com.zhaoyan.ladderball.dao.player.TmpPlayerOfMatchDao;
 import com.zhaoyan.ladderball.dao.recordermatch.RecorderTmpMatchDao;
 import com.zhaoyan.ladderball.dao.teamofmatch.TmpTeamOfMatchDao;
+import com.zhaoyan.ladderball.domain.match.db.Match;
 import com.zhaoyan.ladderball.domain.match.db.TmpMatch;
 import com.zhaoyan.ladderball.domain.match.db.TmpMatchPart;
 import com.zhaoyan.ladderball.domain.match.http.*;
@@ -63,6 +64,10 @@ public class TmpMatchService extends BaseService {
             BeanCopier.create(MatchAddPlayerRequest.Player.class, TmpPlayerOfMatch.class, false);
     private static BeanCopier copierTmpPlayerOfMatchToMatchAddPlayerResponse =
             BeanCopier.create(TmpPlayerOfMatch.class, MatchAddPlayerResponse.Player.class, false);
+
+    // 添加比赛
+    private static BeanCopier copierMatchAddRequestToTmpMatch =
+            BeanCopier.create(MatchAddRequest.class, TmpMatch.class, false);
 
     /**
      * 获取练习赛列表
@@ -277,9 +282,9 @@ public class TmpMatchService extends BaseService {
         tmpTeamOfMatchDao.addTeamOfMatch(teamVisitor);
         // 添加比赛
         TmpMatch match = new TmpMatch();
+        copierMatchAddRequestToTmpMatch.copy(request, match, null);
         match.teamHome = teamHome.id;
         match.teamVisitor = teamVisitor.id;
-        match.playerNumber = request.playerNumber;
         tmpMatchDao.addMatch(match);
         // 将比赛分配给记录者，并且认领主队
         RecorderTmpMatch recorderTmpMatch = new RecorderTmpMatch();

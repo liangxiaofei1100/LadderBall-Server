@@ -93,7 +93,7 @@ public class TmpMatch {
         this.partMinutes = partMinutes;
     }
 
-    public boolean isComplete() {
+    public boolean getComplete() {
         return complete;
     }
 
