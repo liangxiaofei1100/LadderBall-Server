@@ -21,12 +21,12 @@ public class WeiXinUserController {
     WeiXinUserService weiXinUserService;
 
 
-    @RequestMapping(value = "/add", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+    @RequestMapping(value = "/register", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
     public
     @ResponseBody
-    WeiXinUserAddResponse addWeiXinUser(@RequestBody WeiXinUserAddRequest request) {
-        logger.debug("addWeiXinUser() WeiXinUserAddRequest: " + request);
-        WeiXinUserAddResponse response = weiXinUserService.addWeiXinUser(request);
+    WeiXinUserRegisterResponse registerWeiXinUser(@RequestBody WeiXinUserRegisterRequest request) {
+        logger.debug("registerWeiXinUser() WeiXinUserRegisterRequest: " + request);
+        WeiXinUserRegisterResponse response = weiXinUserService.registerWeiXinUser(request);
         return response;
     }
 

@@ -34,6 +34,11 @@ public class WeiXinUser {
     @Column(name = "birthday")
     public Date birthday;
     /**
+     * 地区
+     */
+    @Column(name = "address")
+    public String address;
+    /**
      * 体重，单位kg
      */
     @Column(name = "weight_kg")
@@ -100,6 +105,14 @@ public class WeiXinUser {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public int getGender() {

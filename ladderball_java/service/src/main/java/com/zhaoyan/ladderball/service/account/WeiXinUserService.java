@@ -20,20 +20,22 @@ public class WeiXinUserService {
     @Qualifier("hibernateWeiXinUserDao")
     WeiXinUserDao weiXinUserDao;
 
-
+    private static BeanCopier copierWeiXinUserRegisterRequestToWeiXinUser =
+            BeanCopier.create(WeiXinUserRegisterRequest.class, WeiXinUser.class, false);
     /**
-     * 添加一个微信用户
+     * 注册一个微信用户
      */
-    public WeiXinUserAddResponse addWeiXinUser(WeiXinUserAddRequest request) {
-        WeiXinUserAddResponse response = new WeiXinUserAddResponse();
+    public WeiXinUserRegisterResponse registerWeiXinUser(WeiXinUserRegisterRequest request) {
+        WeiXinUserRegisterResponse response = new WeiXinUserRegisterResponse();
 
         WeiXinUser user = weiXinUserDao.getWeiXinUserByWeiXinId(request.weiXinId);
         if (user != null) {
-            response.buildFail("该用户已经添加过");
+            response.buildFail("该用户已经注册");
             return response;
         }
         user = new WeiXinUser();
-        user.weiXinId = request.weiXinId;
+        copierWeiXinUserRegisterRequestToWeiXinUser.copy(request, user,null);
+        user.birthday = new Date(request.birthday);
         user.createTime = new Date();
         user.lastLoginTime = new Date();
         weiXinUserDao.addWeiXinUser(user);
