@@ -31,7 +31,7 @@ public class HibernateRecorderMatchDao implements RecorderMatchDao{
         // 多表查询时，必须建立引用，才能导航到属性
         criteria.createAlias("match", "m");
         criteria.add(Restrictions.eq("m.complete", isComplete));
-        if (isComplete) {
+        if (!isComplete) {
             criteria.addOrder(Order.asc("m.startTime"));
         } else {
             criteria.addOrder(Order.desc("m.startTime"));

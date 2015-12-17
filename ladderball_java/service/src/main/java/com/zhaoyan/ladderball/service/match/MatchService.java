@@ -337,6 +337,17 @@ public class MatchService extends BaseService {
         match.startTime = new Date(request.startTime);
         matchDao.addMatch(match);
 
+        // 添加小节
+        if (match.totalPart > 0) {
+            for (int i = 1; i <= match.totalPart; i++) {
+                MatchPart matchPart = new MatchPart();
+                matchPart.partNumber = i;
+                matchPart.matchId = match.id;
+                matchPart.isComplete = false;
+                matchPartDao.addMatchPart(matchPart);
+            }
+        }
+
         MatchAddResponse response = new MatchAddResponse();
         response.buildOk();
         return response;
