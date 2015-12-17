@@ -52,4 +52,13 @@ public class RecorderMatch {
         this.asignedTeam = asignedTeam;
     }
 
+    @Override
+    public String toString() {
+        return "RecorderMatch{" +
+                "id=" + id +
+                ", recorderId=" + recorderId +
+                ", match=" + match +
+                ", asignedTeam=" + asignedTeam +
+                '}';
+    }
 }

@@ -406,4 +406,44 @@ public class MatchService extends BaseService {
         response.buildOk();
         return response;
     }
+
+    /**
+     * 分配比赛给记录员
+     */
+    public MatchAsignResponse asignMatch(MatchAsignRequest request) {
+        MatchAsignResponse response = new MatchAsignResponse();
+
+        // 检查记录员号码
+        Recorder recorder = recorderDao.getRecorderByPhone(request.recorderPhone);
+        if (recorder == null) {
+            response.buildFail("号码不存在");
+            return response;
+        } else {
+            Match match = matchDao.getMatch(request.matchId);
+            if (match == null) {
+                response.buildFail("比赛不存在");
+                return response;
+            } else {
+                // 分配队伍给记录员
+                RecorderMatch recorderMatch = recorderMatchDao.getRecorderMatchByMatchIdAsignedTeam(request.matchId, request.asignedTeam);
+                if (recorderMatch == null) {
+                    // 队伍没有分配记录员，添加一条分配
+                    recorderMatch = new RecorderMatch();
+                    recorderMatch.recorderId = recorder.id;
+                    recorderMatch.asignedTeam = request.asignedTeam;
+                    recorderMatch.match = match;
+                    recorderMatchDao.addRecorderMatch(recorderMatch);
+                    logger.debug("addRecorderMatch " + recorderMatch);
+                } else {
+                    // 队伍已经分配记录员，更换记录员
+                    recorderMatch.recorderId = recorder.id;
+                    recorderMatchDao.modifyRecorderMatch(recorderMatch);
+                    logger.debug("modifyRecorderMatch " + recorderMatch);
+                }
+            }
+        }
+
+        response.buildOk();
+        return response;
+    }
 }

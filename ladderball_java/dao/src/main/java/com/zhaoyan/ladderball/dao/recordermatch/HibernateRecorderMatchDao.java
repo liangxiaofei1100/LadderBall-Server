@@ -54,6 +54,18 @@ public class HibernateRecorderMatchDao implements RecorderMatchDao{
     }
 
     @Override
+    public RecorderMatch getRecorderMatchByMatchIdAsignedTeam(long matchId, int asignedTeam) {
+        DetachedCriteria criteria = DetachedCriteria.forClass(RecorderMatch.class);
+        criteria.add(Restrictions.eq("asignedTeam", asignedTeam));
+        criteria.add(Restrictions.eq("match.id", matchId));
+        List<RecorderMatch> recorderMatches = (List<RecorderMatch>) hibernateTemplate.findByCriteria(criteria);
+        if (!recorderMatches.isEmpty()) {
+            return recorderMatches.get(0);
+        }
+        return null;
+    }
+
+    @Override
     public List<RecorderMatch> getRecordByMatchId(long matchId) {
         DetachedCriteria criteria = DetachedCriteria.forClass(RecorderMatch.class);
         criteria.add(Restrictions.eq("match.id", matchId));
