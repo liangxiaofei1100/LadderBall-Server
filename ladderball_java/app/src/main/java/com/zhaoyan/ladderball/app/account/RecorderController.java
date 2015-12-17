@@ -16,14 +16,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-@RequestMapping("/account")
+@RequestMapping("/account/recorder")
 public class RecorderController {
     Logger logger = LoggerFactory.getLogger(RecorderController.class);
 
     @Autowired
     RecorderService recorderService;
 
-    @RequestMapping(value = "/recorder/login", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+    @RequestMapping(value = "/login", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
     public
     @ResponseBody
     RecorderLoginResponse login(@RequestBody RecorderLoginRequest request) {
@@ -32,7 +32,7 @@ public class RecorderController {
         return response;
     }
 
-    @RequestMapping(value = "/recorder/password/set", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+    @RequestMapping(value = "/password/set", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
     public
     @ResponseBody
     RecorderSetPasswordResponse login(@RequestBody RecorderSetPasswordRequest request) {

@@ -3,10 +3,7 @@ package com.zhaoyan.ladderball.service.account;
 
 import com.zhaoyan.ladderball.dao.account.RecorderDao;
 import com.zhaoyan.ladderball.domain.account.db.Recorder;
-import com.zhaoyan.ladderball.domain.account.http.RecorderLoginRequest;
-import com.zhaoyan.ladderball.domain.account.http.RecorderLoginResponse;
-import com.zhaoyan.ladderball.domain.account.http.RecorderSetPasswordRequest;
-import com.zhaoyan.ladderball.domain.account.http.RecorderSetPasswordResponse;
+import com.zhaoyan.ladderball.domain.account.http.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,7 +57,7 @@ public class RecorderService {
     }
 
     /**
-     *  修改密码
+     * 修改密码
      */
     public RecorderSetPasswordResponse setPassword(RecorderSetPasswordRequest request) {
         RecorderSetPasswordResponse response = new RecorderSetPasswordResponse();
@@ -80,6 +77,30 @@ public class RecorderService {
             response.buildFail("修改密码失败");
         }
 
+        return response;
+    }
+
+
+    private static BeanCopier copierRecorderAddRequestToRecorder =
+            BeanCopier.create(RecorderAddRequest.class, Recorder.class, false);
+
+    /**
+     * 添加记录员
+     */
+    public RecorderAddResponse addRecorder(RecorderAddRequest request) {
+        RecorderAddResponse response = new RecorderAddResponse();
+
+        Recorder recorder = recorderDao.getRecorderByPhone(request.phone);
+        if (recorder != null) {
+            response.buildFail("手机号码重复");
+            return response;
+        }
+
+        recorder = new Recorder();
+        copierRecorderAddRequestToRecorder.copy(request, recorder, null);
+        recorderDao.addRecorder(recorder);
+
+        response.buildOk();
         return response;
     }
 }
