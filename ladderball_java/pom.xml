@@ -14,6 +14,7 @@
         <module>domain</module>
         <module>app</module>
         <module>management</module>
+        <module>weixin</module>
     </modules>
 
     <properties>
