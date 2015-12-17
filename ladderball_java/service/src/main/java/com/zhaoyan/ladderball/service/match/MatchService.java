@@ -446,4 +446,22 @@ public class MatchService extends BaseService {
         response.buildOk();
         return response;
     }
+
+    /**
+     * 取消分配比赛给记录员
+     */
+    public MatchAsignDeleteResponse asignMatchDelete(MatchAsignDeleteRequest request) {
+        MatchAsignDeleteResponse response = new MatchAsignDeleteResponse();
+
+        RecorderMatch recorderMatch = recorderMatchDao.getRecorderMatchByMatchIdAsignedTeam(request.matchId, request.team);
+        if (recorderMatch == null) {
+            response.buildFail("这个队伍没有认领人");
+            return response;
+        } else {
+            recorderMatchDao.deleteRecorderMatch(recorderMatch);
+        }
+
+        response.buildOk();
+        return response;
+    }
 }

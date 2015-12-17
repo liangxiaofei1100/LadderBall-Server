@@ -45,4 +45,16 @@ public class MatchController {
         MatchAsignResponse response = matchService.asignMatch(request);
         return response;
     }
+
+    /**
+     * 取消比赛分配给记录员
+     */
+    @RequestMapping(value = "/asign/delete", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+    public
+    @ResponseBody
+    MatchAsignDeleteResponse asignMatchDelete(@RequestBody MatchAsignDeleteRequest request) {
+        logger.debug("asignMatchDelete() MatchAsignDeleteRequest: " + request);
+        MatchAsignDeleteResponse response = matchService.asignMatchDelete(request);
+        return response;
+    }
 }
