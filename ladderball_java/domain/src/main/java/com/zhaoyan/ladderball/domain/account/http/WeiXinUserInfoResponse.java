@@ -1,74 +1,51 @@
-package com.zhaoyan.ladderball.domain.account.db;
+package com.zhaoyan.ladderball.domain.account.http;
 
-import javax.persistence.*;
+import com.zhaoyan.ladderball.domain.common.http.Response;
+
 import java.util.Date;
 
-@Entity(name = "weixinuser")
-public class WeiXinUser {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+public class WeiXinUserInfoResponse extends Response{
+
+    /**
+     * 用户id
+     */
     public long id;
     /**
      * 微信id
      */
-    @Column(name = "weixinid")
     public String weiXinId;
     /**
      * 昵称
      */
-    @Column(name = "nickName")
     public String nickName;
     /**
      * 手机
      */
-    @Column(name = "phone")
     public String phone;
     /**
      * 性别
      */
-    @Column(name = "gender")
     public int gender;
     /**
      * 生日
      */
-    @Column(name = "birthday")
-    public Date birthday;
+    public long birthday;
     /**
      * 体重，单位kg
      */
-    @Column(name = "weight_kg")
     public float weight;
     /**
      * 身高，单位cm
      */
-    @Column(name = "height_cm")
     public float height;
     /**
      * 擅长位置
      */
-    @Column(name = "good_position")
     public String goodPosition;
     /**
      * 惯用脚
      */
-    @Column(name = "good_foot")
     public String goodFoot;
-
-    /**
-     * 创建时间
-     */
-    @Column(name = "create_time")
-    public Date createTime;
-
-    /**
-     * 最后登录时间
-     */
-    @Column(name = "last_login_time")
-    public Date lastLoginTime;
-
-    public static final int GENDER_NOT_SET = 0;
-    public static final int GENDER_MALE = 1;
-    public static final int GENDER_FEMALE = 2;
 
     public long getId() {
         return id;
@@ -110,14 +87,6 @@ public class WeiXinUser {
         this.gender = gender;
     }
 
-    public Date getBirthday() {
-        return birthday;
-    }
-
-    public void setBirthday(Date birthday) {
-        this.birthday = birthday;
-    }
-
     public float getWeight() {
         return weight;
     }
@@ -148,23 +117,5 @@ public class WeiXinUser {
 
     public void setGoodFoot(String goodFoot) {
         this.goodFoot = goodFoot;
-    }
-
-    @Override
-    public String toString() {
-        return "WeiXinUser{" +
-                "id=" + id +
-                ", weiXinId='" + weiXinId + '\'' +
-                ", nickName='" + nickName + '\'' +
-                ", phone='" + phone + '\'' +
-                ", gender=" + gender +
-                ", birthday=" + birthday +
-                ", weight=" + weight +
-                ", height=" + height +
-                ", goodPosition='" + goodPosition + '\'' +
-                ", goodFoot='" + goodFoot + '\'' +
-                ", createTime=" + createTime +
-                ", lastLoginTime=" + lastLoginTime +
-                '}';
     }
 }
