@@ -11,6 +11,7 @@ public class FootballTeamListMyTeamResponse extends Response{
     public static class FootballTeam {
         public long id;
         public String name;
+        public String logo;
         public String address;
         public int playerNumber;
         public String captain;

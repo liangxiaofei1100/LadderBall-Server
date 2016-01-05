@@ -1,8 +1,6 @@
 package com.zhaoyan.ladderball.weixin.team;
 
-import com.zhaoyan.ladderball.domain.team.http.FootballTeamAddRequest;
-import com.zhaoyan.ladderball.domain.team.http.FootballTeamAddResponse;
-import com.zhaoyan.ladderball.domain.team.http.FootballTeamListMyTeamResponse;
+import com.zhaoyan.ladderball.domain.team.http.*;
 import com.zhaoyan.ladderball.service.team.FootballTeamService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,12 +19,27 @@ public class FootballTeamController {
     @Autowired
     FootballTeamService footballTeamService;
 
+    /**
+     * 创建球队
+     */
     @RequestMapping(value = "/add", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
     public
     @ResponseBody
     FootballTeamAddResponse addFootballTeam(@RequestBody FootballTeamAddRequest request) {
         logger.debug("addFootballTeam() FootballTeamAddRequest: " + request);
         FootballTeamAddResponse response = footballTeamService.addFootballTeam(request);
+        return response;
+    }
+
+    /**
+     * 球队信息
+     */
+    @RequestMapping(value = "/info", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+    public
+    @ResponseBody
+    FootTeamInfoResponse getFootballTeamInfo(@RequestBody FootTeamInfoRequest request) {
+        logger.debug("getFootballTeamInfo() FootTeamInfoRequest: " + request);
+        FootTeamInfoResponse response = footballTeamService.getFootballTeamInfo(request);
         return response;
     }
 

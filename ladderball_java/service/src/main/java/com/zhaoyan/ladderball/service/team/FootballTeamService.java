@@ -5,9 +5,7 @@ import com.zhaoyan.ladderball.dao.team.FootballTeamDao;
 import com.zhaoyan.ladderball.dao.wexinuserfootballteam.WeiXinUserFootballTeamDao;
 import com.zhaoyan.ladderball.domain.account.db.WeiXinUser;
 import com.zhaoyan.ladderball.domain.team.db.FootballTeam;
-import com.zhaoyan.ladderball.domain.team.http.FootballTeamAddRequest;
-import com.zhaoyan.ladderball.domain.team.http.FootballTeamAddResponse;
-import com.zhaoyan.ladderball.domain.team.http.FootballTeamListMyTeamResponse;
+import com.zhaoyan.ladderball.domain.team.http.*;
 import com.zhaoyan.ladderball.domain.wexinuserfootballteam.db.WeiXinUserFooballTeam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -59,6 +57,7 @@ public class FootballTeamService {
         team = new FootballTeam();
         copierFootballTeamAddRequestToFootballTeam.copy(request, team, null);
         footballTeamDao.addFootballTeam(team);
+        response.teamId = team.id;
 
         // 添加创建者为队长
         WeiXinUserFooballTeam weiXinUserFooballTeam = new WeiXinUserFooballTeam();
@@ -79,7 +78,7 @@ public class FootballTeamService {
         response.teams = new ArrayList<>();
 
         List<WeiXinUserFooballTeam> weiXinUserFooballTeamList = weiXinUserFootballTeamDao.getWeiXinUserFooballTeamByWeiXinId(request.weiXinId);
-        for(WeiXinUserFooballTeam weiXinUserFooballTeam : weiXinUserFooballTeamList) {
+        for (WeiXinUserFooballTeam weiXinUserFooballTeam : weiXinUserFooballTeamList) {
             FootballTeamListMyTeamResponse.FootballTeam team = new FootballTeamListMyTeamResponse.FootballTeam();
             FootballTeam footballTeam = weiXinUserFooballTeam.footballTeam;
             if (footballTeam != null) {
@@ -99,6 +98,42 @@ public class FootballTeamService {
 
             response.teams.add(team);
         }
+
+        response.buildOk();
+        return response;
+    }
+
+    private static BeanCopier copierFootballTeamToFootTeamInfoResponse =
+            BeanCopier.create(FootballTeam.class, FootTeamInfoResponse.TeamInfo.class, false);
+
+    /**
+     * 球队信息
+     */
+    public FootTeamInfoResponse getFootballTeamInfo(FootTeamInfoRequest request) {
+        FootTeamInfoResponse response = new FootTeamInfoResponse();
+
+        FootballTeam footballTeam = footballTeamDao.getFootballTeamById(request.teamId);
+        if (footballTeam == null) {
+            response.buildFail("没有找到球队");
+            return response;
+        }
+
+        response.teamInfo = new FootTeamInfoResponse.TeamInfo();
+        copierFootballTeamToFootTeamInfoResponse.copy(footballTeam, response.teamInfo, null);
+        // 队长信息
+        WeiXinUserFooballTeam captionInfo = weiXinUserFootballTeamDao.getWeiXinUserFooballTeamCaptitainByTeamId(footballTeam.id);
+        if (captionInfo != null && captionInfo.weiXinUser != null) {
+            response.teamInfo.captain = captionInfo.weiXinUser.nickName;
+
+            if (captionInfo.weiXinUser.weiXinId.equals(request.weiXinId)) {
+                response.teamInfo.isIAmCaptain = true;
+            }
+        }
+
+        // 球员数
+        List<WeiXinUserFooballTeam> weiXinUserFooballTeams =
+                weiXinUserFootballTeamDao.getWeiXinUserFooballTeamByTeamId(footballTeam.id);
+        response.teamInfo.playerNumber = weiXinUserFooballTeams.size();
 
         response.buildOk();
         return response;
