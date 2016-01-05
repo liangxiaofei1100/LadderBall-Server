@@ -84,6 +84,7 @@ public class FootballTeamService {
             if (footballTeam != null) {
                 team.id = footballTeam.id;
                 team.name = footballTeam.name;
+                team.logo = footballTeam.logo;
                 team.address = footballTeam.address;
 
                 WeiXinUserFooballTeam captionInfo = weiXinUserFootballTeamDao.getWeiXinUserFooballTeamCaptitainByTeamId(footballTeam.id);
