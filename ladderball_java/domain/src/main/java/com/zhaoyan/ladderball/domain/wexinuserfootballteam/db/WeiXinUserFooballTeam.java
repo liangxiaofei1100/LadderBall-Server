@@ -24,4 +24,16 @@ public class WeiXinUserFooballTeam {
      */
     @Column(name = "is_captain")
     public boolean isCaptain;
+
+    /**
+     * 号码
+     */
+    @Column(name = "number")
+    public int number;
+
+    /**
+     * 位置
+     */
+    @Column(name = "position")
+    public String position;
 }

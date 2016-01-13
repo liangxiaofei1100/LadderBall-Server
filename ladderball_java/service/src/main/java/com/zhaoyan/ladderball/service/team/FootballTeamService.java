@@ -139,4 +139,11 @@ public class FootballTeamService {
         response.buildOk();
         return response;
     }
+
+    /**
+     * 球队球员
+     */
+    public FootBallTeamPlayerListResponse getFootballTeamPlayers(FootBallTeamPlayerListRequest request) {
+        return null;
+    }
 }

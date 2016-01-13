@@ -56,5 +56,16 @@ public class FootballTeamController {
         return response;
     }
 
+    /**
+     * 球队球员
+     */
+    @RequestMapping(value = "/player/list", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
+    public
+    @ResponseBody
+    FootBallTeamPlayerListResponse getFootballTeamPlayers(@RequestBody FootBallTeamPlayerListRequest request) {
+        logger.debug("getFootballTeamPlayers() FootBallTeamPlayerListRequest: " + request);
+        FootBallTeamPlayerListResponse response = footballTeamService.getFootballTeamPlayers(request);
+        return response;
+    }
 
 }
